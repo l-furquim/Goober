@@ -1,10 +1,8 @@
-version: '3'
-
+version: '3.8'
 services:
-  db:
-    image: postgres:14
-    container_name: goober
-    tty: true
+  postgres:
+    image: postgres
+    container_name: goober-postgres
     environment:
       POSTGRES_DB: goober
       POSTGRES_USER: postgres
@@ -12,7 +10,4 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./db/schema.sql:/docker-entrypoint-initdb.d/1.sql
-volumes:
-  postgres-data:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql

@@ -9,7 +9,7 @@ import java.util.Optional;
 @Component
 public class UserMapper {
 
-    public Optional<UserEntity> toEntity(User user){
+    public static Optional<UserEntity> toEntity(User user){
         return Optional.of(new UserEntity(
                 user.getUserId(),
                 user.getUserName(),
@@ -19,7 +19,7 @@ public class UserMapper {
                 user.getStatus()
         ));
     }
-    public Optional<User> toDomain(UserEntity user){
+    public static Optional<User> toDomain(UserEntity user){
         return Optional.of(new User(
                 user.getUserId(),
                 user.getUserName(),

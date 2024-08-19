@@ -3,14 +3,19 @@ package back.application.service.user;
 import back.adapter.in.web.controller.user.dto.LoginUserRequestDto;
 import back.adapter.in.web.controller.user.dto.RegisterUserRequestDto;
 import back.adapter.in.web.controller.user.dto.VerifierCodeRequestDto;
+import back.application.service.auth.AuthServiceImpl;
 import back.application.service.email.EmailServiceImpl;
 import back.domain.enums.AccountStatus;
+import back.domain.exception.AuthException;
 import back.domain.exception.UserException;
 import back.domain.model.user.User;
 import back.domain.model.userVerifier.UserVerifier;
+import back.domain.port.in.AuthService;
 import back.domain.port.in.UserService;
+import back.domain.port.in.UserVerifierService;
 import back.domain.port.out.UserRepository;
-import back.application.service.userVerifier.UserVerifierServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +29,9 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+
 
     @Autowired
     private EmailServiceImpl emailService;
@@ -36,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(RegisterUserRequestDto registerUserRequestDto, UserVerifierServiceImpl userVerifierService) {
+    public void registerUser(RegisterUserRequestDto registerUserRequestDto, UserVerifierService userVerifierService) {
         var aUser = userRepository.findUserByEmail(registerUserRequestDto.userEmail());
 
         if(aUser.isPresent()){
@@ -53,13 +60,14 @@ public class UserServiceImpl implements UserService {
 
 
         UserVerifier userVerifierJpaEntity = new UserVerifier(
-                 registerUserRequestDto.userEmail(), passwordEncoder.encode(registerUserRequestDto.userPassword()), Instant.now().plusMillis(6000000), AccountStatus.PENDING, UUID.randomUUID().toString());
+                registerUserRequestDto.userName(),registerUserRequestDto.userEmail(), passwordEncoder.encode(registerUserRequestDto.userPassword())
+                , Instant.now().plusMillis(6000000), AccountStatus.PENDING, UUID.randomUUID().toString());
 
         try{
             userVerifierService.save(userVerifierJpaEntity);
-            emailService.sendEmail(
-                    registerUserRequestDto.userEmail(),"Codigo para criação da conta!",
-                    "aqui esta seu codigo: " + userVerifierJpaEntity.getCode());
+            //emailService.sendEmail(
+                    //registerUserRequestDto.userEmail(),"Codigo para criação da conta!",
+                    //"aqui esta seu codigo: " + userVerifierJpaEntity.getCode());
         }catch (IllegalArgumentException e){
             throw new UserException(e.getMessage());
         }catch(OptimisticLockingFailureException e) {
@@ -70,66 +78,87 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User verifierCode(VerifierCodeRequestDto verifierCodeRequestDto, UserVerifierServiceImpl userVerifierService) {
+    public UserVerifier verifierCode(VerifierCodeRequestDto verifierCodeRequestDto, UserVerifierService userVerifierService) {
         var aUserVerifier = userVerifierService.getUserVerifierByCode(verifierCodeRequestDto.code());
 
-        var anUser = userRepository.findUserByEmail(aUserVerifier.get().getUserVerifierEmail());
-
-        if(aUserVerifier.isEmpty()){
+        if (aUserVerifier.isEmpty()) {
             throw new UserException("Codigo invalido ou incorreto !");
         }
-        userVerifierService.delete(aUserVerifier.get());
+        var anUser = userRepository.findUserByEmail(aUserVerifier.get().getUserVerifierEmail());
 
-        return anUser.get();
 
-    }
-
-    @Override
-    public User validateRegister(String code,String userName, UserVerifierServiceImpl userVerifierService) {
         ZoneId zoneId = ZoneId.systemDefault();
 
         Instant instant = Instant.now();
 
         ZonedDateTime zonedDateTime = instant.atZone(zoneId);
 
-        var userVerifier = userVerifierService.getUserVerifierByCode(code);
 
-        if(userVerifier.isEmpty()){
-            throw new UserException("Codigo invalido , nao existe nenhum login com este codigo!");
-        }
-        if(userVerifier.get().getExpiresAt().compareTo(Instant.now()) <=0){
-            userVerifierService.delete(userVerifier.get());
+        if (aUserVerifier.get().getExpiresAt().compareTo(Instant.now()) <= 0) {
+            userVerifierService.delete(aUserVerifier.get());
             throw new UserException("Seu codigo de validação expirou!");
         }
 
-        userVerifier.get().setStatus(AccountStatus.ACTIVE);
 
-        var anUser = new User(
-                UUID.randomUUID(),userName,userVerifier.get().getUserVerifierEmail(),userVerifier.get().getUserVerifierPassword(),
-               "woiew",AccountStatus.ACTIVE);
+        var User = new User(
+                UUID.randomUUID(), aUserVerifier.get().getUserVerifierName(),
+                aUserVerifier.get().getUserVerifierEmail(), aUserVerifier.get().getUserVerifierPassword(),
+                "woiew", AccountStatus.ACTIVE);
 
 
-        try{
-            userRepository.save(anUser);
-            userVerifierService.delete(userVerifier.get());
-        }catch (IllegalArgumentException e){
+
+
+        try {
+            userRepository.save(User);
+            return aUserVerifier.get();
+        } catch (IllegalArgumentException e) {
             throw new UserException(e.getMessage());
-        }catch(OptimisticLockingFailureException e) {
+        } catch (OptimisticLockingFailureException e) {
             throw new UserException((e.getMessage()));
         }
 
-        return anUser;
     }
 
     @Override
-    public boolean loginCredentialsValidade(LoginUserRequestDto loginUserRequestDto) {
-        var aUser = this.userRepository.findUserByEmail(loginUserRequestDto.email());
+    public boolean loginCredentialsValidade(User user, String password) {
 
-        if(aUser.isPresent()) {
+        return passwordEncoder.matches(password, user.getUserPassword());
 
-            return passwordEncoder.matches(loginUserRequestDto.password(), aUser.get().getUserPassword());
+    }
+
+    @Override
+    public String loginUser(LoginUserRequestDto loginUserRequestDto, UserVerifierService userVerifierService) {
+
+        var authService = new AuthServiceImpl(userRepository);
+
+        if(userVerifierService.getUserVerifierByUserEmail(loginUserRequestDto.email()).isPresent()){
+            throw new AuthException("Você ainda não validou sua conta, tente novamente após validar o codigo!");
         }
 
-        return false;
+
+        var user = userRepository.findUserByEmail(loginUserRequestDto.email());
+
+        if(user.isEmpty()){
+            throw new AuthException("Não existe nenhuma conta com estas credenciais");
+        }
+
+        if(!loginCredentialsValidade(user.get(), loginUserRequestDto.password())){
+            throw new AuthException("Senha incorreta");
+        }
+
+
+        return authService.createToken(user.get());
     }
+
+    @Override
+    public User loadUserByUserName(String userName) {
+        var user = userRepository.findUserByEmail(userName);
+
+        if(user.isEmpty()){
+            throw new UserException("Não foi possivel carregar o usuario pelo seu email");
+        }
+        return user.get();
+    }
+
+
 }

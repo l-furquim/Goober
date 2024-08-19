@@ -1,5 +1,7 @@
 package back.adapter.out.persistence.entity.announcement;
 
+import back.adapter.out.persistence.entity.product.ProductEntity;
+import back.adapter.out.persistence.entity.question.QuestionEntity;
 import back.domain.model.product.Product;
 import back.domain.model.question.Question;
 import jakarta.persistence.*;
@@ -14,37 +16,46 @@ import java.util.UUID;
 public class AnnouncementEntity {
 
     @Id
-    @Column(name = "announcementId")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long announcementId;
+    @Column(name = "announcement_id")
+    private UUID announcementId;
 
-    @Column(name = "announcementName")
+    @Column(name = "announcement_name")
     private String announcementName;
 
-    @Column(name = "announcementPrice")
+    @Column(name = "announcement_price")
     private BigDecimal announcementPrice;
 
-    @Column(name = "announcementLikes")
+    @Column(name = "announcement_likes")
     private Integer announcementLikes;
 
-    @Column(name = "announcementQuestions")
+    @Column(name = "announcement_questions")
     private Integer announcementQuestions;
 
-    @Column(name = "announcerName")
+    @Column(name = "announcer_name")
     private String announcerName;
 
-    @Column(name = "productImages")
+    @Column(name = "product_images")
     private String productImages;
 
-    private List<Product> products;
+    @OneToMany
+    @JoinTable(
+            name = "announcement_products",
+            joinColumns = @JoinColumn(name = "announcement_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<ProductEntity> products;
 
-    private List<Question> productQuestions;
+    @OneToMany
+    @JoinTable(
+            name = "announcement_questions",
+            joinColumns = @JoinColumn(name = "announcement_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    private List<QuestionEntity> productQuestions;
 
     public AnnouncementEntity(){
 
     }
 
-    public AnnouncementEntity(BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerName, String productImages, List<Product> products, List<Question> productQuestions) {
+    public AnnouncementEntity(BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerName, String productImages, List<ProductEntity> products) {
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
         this.announcementName = announcementName;
@@ -52,14 +63,13 @@ public class AnnouncementEntity {
         this.announcerName = announcerName;
         this.productImages = productImages;
         this.products = products;
-        this.productQuestions = productQuestions;
     }
 
-    public Long getAnnouncementEntityId() {
+    public UUID getAnnouncementEntityId() {
         return announcementId;
     }
 
-    public void setAnnouncementEntityId(Long announcementId) {
+    public void setAnnouncementEntityId(UUID announcementId) {
         this.announcementId = announcementId;
     }
 
@@ -90,7 +100,7 @@ public class AnnouncementEntity {
     public void setProductImages(String productImages) {
         this.productImages = productImages;
     }
-    public List<Question> getProductQuestions(){
+    public List<QuestionEntity> getProductQuestions(){
         return this.productQuestions;
     }
 
@@ -102,15 +112,15 @@ public class AnnouncementEntity {
         this.announcerName = announcerName;
     }
 
-    public List<Product> getProducts() {
+    public List<ProductEntity> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ProductEntity> products) {
         this.products = products;
     }
 
-    public void addProducts(Product product){
+    public void addProducts(ProductEntity product){
         this.products.add(product);
     }
 
@@ -130,7 +140,7 @@ public class AnnouncementEntity {
         this.announcerName = announcerName;
     }
 
-    public void setProductQuestions(List<Question> productQuestions) {
+    public void setProductQuestions(List<QuestionEntity> productQuestions) {
         this.productQuestions = productQuestions;
     }
 
@@ -141,4 +151,8 @@ public class AnnouncementEntity {
     public void setAnnouncementEntityName(String announcementName) {
         this.announcementName = announcementName;
     }
+
+
+
+
 }

@@ -5,6 +5,6 @@ import back.domain.model.product.Product;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record CreateAnnouncementRequestDto(
+public record   CreateAnnouncementRequestDto(
         String name, String imagesPath, Double price, String announcerId, List<Product> products) {
 }

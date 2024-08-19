@@ -4,6 +4,8 @@ import back.adapter.out.persistence.mapper.announcement.AnnouncementMapper;
 import back.adapter.out.persistence.repository.announcement.AnnouncementJpaRepository;
 import back.domain.model.announcement.Announcement;
 import back.domain.port.out.AnnouncementRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @Component
 public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(AnnouncementPersistenceAdapter.class);
     private final AnnouncementMapper announcementMapper;
     private final AnnouncementJpaRepository announcementJpaRepository;
 
@@ -25,12 +28,16 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
     public void save(Announcement announcement) {
         var anEntity = announcementMapper.toEntity(announcement);
 
+        log.info(announcement.getProducts().toString());
+
         announcementJpaRepository.save(anEntity.get());
     }
 
     @Override
     public void delete(Announcement announcement) {
         var anEntity = announcementMapper.toEntity(announcement);
+
+
 
         announcementJpaRepository.save(anEntity.get());
     }
@@ -77,5 +84,25 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
             return Optional.empty();
         }
         return Optional.of(anEntity.get().stream().map(an -> announcementMapper.toDomain(an).get()).toList());
+    }
+
+    @Override
+    public Optional<List<Announcement>> findAnnouncementByUpperName(String name) {
+        var ansEntity = announcementJpaRepository.findAnnouncementsByUpperName(name);
+
+        if(ansEntity.isEmpty()){
+            return Optional.empty();
+        }
+
+        return Optional.of(ansEntity.get().stream().map(ann -> announcementMapper.toDomain(ann).get()).toList());
+    }
+
+    @Override
+    public List<Announcement> findAll() {
+
+        var announces = announcementJpaRepository.findAll();
+
+        return announces.stream().map(ann -> announcementMapper.toDomain(ann).get()).toList();
+
     }
 }

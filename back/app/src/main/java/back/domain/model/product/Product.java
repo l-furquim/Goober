@@ -1,6 +1,7 @@
 package back.domain.model.product;
 
 
+import back.domain.enums.ProductCategories;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,6 +22,7 @@ public class Product {
 
     private BigDecimal productPrice;
 
+    private ProductCategories productCategorie;
 
     private String productDescription;
 
@@ -31,10 +33,11 @@ public class Product {
 
     }
 
-    public Product(UUID productId, String productName, BigDecimal productPrice, String productDescription, String productImages) {
+    public Product(UUID productId, String productName, BigDecimal productPrice, ProductCategories productCategorie, String productDescription, String productImages) {
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
+        this.productCategorie = productCategorie;
         this.productDescription = productDescription;
         this.productImages = productImages;
     }
@@ -77,5 +80,13 @@ public class Product {
 
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
+    }
+
+    public ProductCategories getProductCategorie() {
+        return productCategorie;
+    }
+
+    public void setProductCategorie(ProductCategories productCategorie) {
+        this.productCategorie = productCategorie;
     }
 }

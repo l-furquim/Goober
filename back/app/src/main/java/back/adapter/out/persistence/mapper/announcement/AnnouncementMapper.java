@@ -1,6 +1,8 @@
 package back.adapter.out.persistence.mapper.announcement;
 
 import back.adapter.out.persistence.entity.announcement.AnnouncementEntity;
+import back.adapter.out.persistence.mapper.product.ProductMapper;
+import back.adapter.out.persistence.mapper.question.QuestionMapper;
 import back.domain.model.announcement.Announcement;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +18,12 @@ public class AnnouncementMapper {
                 announcement.getAnnouncementQuestions(),
                 announcement.getAnnouncerId(),
                 announcement.getProductImages(),
-                announcement.getProducts(),
-                announcement.getProductQuestions()
+                ProductMapper.productToEntityList(announcement.getProducts())
         ));
     }
+
+
+
 
     public Optional<Announcement> toDomain(AnnouncementEntity announcement){
         return Optional.of(new Announcement(
@@ -29,10 +33,10 @@ public class AnnouncementMapper {
                 announcement.getAnnouncementEntityQuestions(),
                 announcement.getAnnouncerId(),
                 announcement.getProductImages(),
-                announcement.getProducts(),
-                announcement.getProductQuestions()
+                ProductMapper.productEntityToDomainList(announcement.getProducts())
         ));
     }
+
 
 
 }

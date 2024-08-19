@@ -1,10 +1,10 @@
 package back.domain.port.in;
 
-import back.adapter.in.web.controller.product.dto.ChangeProductNameRequestDto;
-import back.adapter.in.web.controller.product.dto.ChangeProductPriceRequestDto;
-import back.adapter.in.web.controller.product.dto.CreateProductRequestDto;
-import back.adapter.in.web.controller.product.dto.DeleteProductRequestDto;
+import back.adapter.in.web.controller.product.dto.*;
 import back.domain.model.product.Product;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
 
@@ -12,6 +12,6 @@ public interface ProductService {
     void deleteProduct(DeleteProductRequestDto product);
     void changeProductPrice(ChangeProductPriceRequestDto product);
     void changeProductName(ChangeProductNameRequestDto product);
-
-
+    Optional<List<Product>> findProductsByCategories(String categories);
+    Optional<List<Product>> findProductsByNameAndPriceFilter(FindProductsByNameAndPriceFilterRequesDto findProductsByNameAndPriceFilterRequesDto);
 }

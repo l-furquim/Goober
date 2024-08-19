@@ -2,6 +2,7 @@ package back.adapter.out.persistence.mapper.cart;
 
 import back.adapter.out.persistence.entity.cart.CartEntity;
 import back.adapter.out.persistence.entity.user.UserEntity;
+import back.adapter.out.persistence.mapper.product.ProductMapper;
 import back.domain.model.cart.Cart;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class CartMapper {
                 cart.getItemsQuantity(),
                 cart.getTotalPrice(),
                 cart.getUserId(),
-                cart.getCartProducts()
+                ProductMapper.productToEntityList(cart.getCartProducts())
         ));
     }
 
@@ -26,7 +27,7 @@ public class CartMapper {
                 cart.getItemsQuantity(),
                 cart.getTotalPrice(),
                 cart.getUserId(),
-                cart.getCartEntityProducts()
+                ProductMapper.productEntityToDomainList(cart.getCartEntityProducts())
         ));
     }
 

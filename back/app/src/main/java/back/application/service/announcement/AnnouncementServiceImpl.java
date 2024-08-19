@@ -4,41 +4,39 @@ import back.adapter.in.web.controller.announcement.dto.CreateAnnouncementRequest
 import back.adapter.in.web.controller.announcement.dto.DeleteAnnouncementRequestDto;
 import back.adapter.in.web.controller.announcement.dto.UpdateAnnouncementNameRequestDto;
 import back.adapter.in.web.controller.announcement.dto.UpdateAnnouncementPriceRequestDto;
+import back.domain.enums.ProductCategories;
 import back.domain.exception.AnnouncementException;
 import back.domain.exception.UserException;
 import back.domain.model.announcement.Announcement;
 import back.domain.model.product.Product;
 import back.domain.port.in.AnnouncementService;
 import back.domain.port.out.AnnouncementRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.text.Normalizer;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
-
-    public AnnouncementServiceImpl(){
-
-    }
-    private AnnouncementRepository announcementRepository;
+    private static final Logger log = LoggerFactory.getLogger(AnnouncementServiceImpl.class);
+    private final AnnouncementRepository announcementRepository;
 
     public AnnouncementServiceImpl(AnnouncementRepository announcementRepository) {
         this.announcementRepository = announcementRepository;
     }
-
 
     @Override
     public Announcement createAnnouncement(CreateAnnouncementRequestDto createAnnouncementRequestDto) {
         if(createAnnouncementRequestDto.name().isBlank()){
             throw new AnnouncementException("Nao e possivel criar um anuncio sem nome !");
         }
+
 
         var announcement = new Announcement(
                BigDecimal.valueOf(createAnnouncementRequestDto.price()),
@@ -47,8 +45,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 0,
                 createAnnouncementRequestDto.announcerId(),
                 createAnnouncementRequestDto.imagesPath(),
-                createAnnouncementRequestDto.products(),
-                null
+                createAnnouncementRequestDto.products()
         );
 
         try{
@@ -110,12 +107,15 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         var listOfWords = Arrays.stream(arrayOfWords).toList();
 
-        List<Announcement> list = new ArrayList<Announcement>();
-        for(int i=0; i< listOfWords.size(); i++ ){
-            var announcementsList = announcementRepository.findAnnouncementsByName(listOfWords.get(i)).get();
 
-            if(!announcementsList.isEmpty()){
-                announcementsList.stream().map(announcement -> list.add(announcement));
+        List<Announcement> list = new ArrayList<Announcement>();
+        for(String word: listOfWords){
+            var announcementsList = announcementRepository.findAnnouncementByUpperName(word);
+
+
+            log.info(word);
+            if(announcementsList.isPresent()){
+                announcementsList.get().addAll(announcementsList.get());
             }
         }
         return list;
@@ -124,5 +124,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public Optional<List<Announcement>> findAnnouncementByAnnouncerName(String name) {
         return announcementRepository.findAnnouncementsByAnnouncerName(name);
+    }
+
+    @Override
+    public List<Announcement> findAll() {
+        return announcementRepository.findAll();
     }
 }

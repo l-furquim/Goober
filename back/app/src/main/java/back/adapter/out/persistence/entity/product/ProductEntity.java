@@ -1,11 +1,11 @@
 package back.adapter.out.persistence.entity.product;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import back.domain.enums.ProductCategories;
+import back.domain.model.product.Product;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,29 +13,34 @@ import java.util.UUID;
 public class ProductEntity {
 
     @Id
-    @Column(name = "productID")
+    @Column(name = "product_id")
     private UUID productId;
 
-    @Column(name = "productName")
+    @Column(name = "product_name")
     private String productName;
 
-    @Column(name = "productPrice")
+    @Column(name = "product_price")
     private BigDecimal productPrice;
 
-    @Column(name = "productDescription")
+    @Column(name = "product_categorie")
+    @Enumerated(value = EnumType.STRING)
+    private ProductCategories productCategories;
+
+    @Column(name = "product_description")
     private String productDescription;
 
-    @Column(name = "productImage")
+    @Column(name = "product_image")
     private String productImages;
 
     public ProductEntity(){
 
     }
 
-    public ProductEntity(UUID productId, String productName, BigDecimal productPrice, String productDescription, String productImages) {
+    public ProductEntity(UUID productId, String productName, BigDecimal productPrice, ProductCategories productCategories, String productDescription, String productImages) {
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
+        this.productCategories = productCategories;
         this.productDescription = productDescription;
         this.productImages = productImages;
     }
@@ -79,5 +84,25 @@ public class ProductEntity {
     public void setProductEntityDescription(String productDescription) {
         this.productDescription = productDescription;
     }
+
+    public ProductCategories getProductCategories() {
+        return productCategories;
+    }
+
+    public void setProductCategories(ProductCategories productCategories) {
+        this.productCategories = productCategories;
+    }
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productPrice=" + productPrice +
+                ", productCategorie='" + productCategories + '\'' +
+                ", productDescription='" + productDescription + '\'' +
+                ", productImages='" + productImages + '\'' +
+                '}';
+    }
+
 }
 

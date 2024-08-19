@@ -30,7 +30,7 @@ public class QuestionPersistenceAdapter implements QuestionRepository {
 
     @Override
     public void delete(Question question) {
-        var qEntity = questionMapper.toEntity(question);
+        var qEntity = questionJpaRepository.findById(question.getQuestionId());
 
         questionJpaRepository.delete(qEntity.get());
     }

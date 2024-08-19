@@ -13,4 +13,6 @@ public interface AnnouncementRepository {
     Optional<List<Announcement>> findAnnouncementsByName(String name);
     Optional<List<Announcement>> findAnnouncementsByAnnouncerName(String name);
     Optional<List<Announcement>> findAnnouncementsByPrice(BigDecimal price);
+    Optional<List<Announcement>> findAnnouncementByUpperName(String name);
+    List<Announcement> findAll();
 }

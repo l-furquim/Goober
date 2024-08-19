@@ -48,7 +48,7 @@ public class UserVerifierPersistenceAdapter implements UserVerifierRepository {
 
     @Override
     public void delete(UserVerifier userVerifier) {
-        var entity = userVerifierMapper.toEntity(userVerifier);
+        var entity = userVerifierJpaRepository.findUserVerifierByCode(userVerifier.getCode());
 
         userVerifierJpaRepository.delete(entity.get());
     }

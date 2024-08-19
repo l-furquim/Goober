@@ -42,7 +42,7 @@ public class Announcement {
 
     }
 
-    public Announcement(BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products, List<Question> productQuestions) {
+    public Announcement(BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products) {
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
         this.announcementName = announcementName;
@@ -50,7 +50,6 @@ public class Announcement {
         this.announcerId = announcerId;
         this.productImages = productImages;
         this.products = products;
-        this.productQuestions = productQuestions;
     }
 
     public Long getAnnouncementId() {

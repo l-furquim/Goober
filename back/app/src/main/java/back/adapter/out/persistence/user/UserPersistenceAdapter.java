@@ -32,7 +32,7 @@ public class UserPersistenceAdapter implements UserRepository {
 
     @Override
     public void delete(User user) {
-        var auser = userMapper.toEntity(user);
+        var auser = userJpaRepository.findById(user.getUserId());
 
         userJpaRepository.delete(auser.get());
     }

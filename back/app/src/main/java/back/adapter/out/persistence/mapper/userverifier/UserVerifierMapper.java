@@ -11,7 +11,8 @@ public class UserVerifierMapper {
 
     public Optional<UserVerifierEntity> toEntity(UserVerifier userVerifier){
         return Optional.of(new UserVerifierEntity(
-            userVerifier.getUserVerifierEmail(),
+                userVerifier.getUserVerifierName(),
+                userVerifier.getUserVerifierEmail(),
                 userVerifier.getUserVerifierPassword(),
                 userVerifier.getExpiresAt(),
                 userVerifier.getStatus(),
@@ -21,6 +22,7 @@ public class UserVerifierMapper {
 
     public Optional<UserVerifier> toDomain(UserVerifierEntity userVerifier){
         return Optional.of(new UserVerifier(
+                userVerifier.getUserVerifierName(),
                 userVerifier.getUserVerifierEntityEmail(),
                 userVerifier.getUserVerifierEntityPassword(),
                 userVerifier.getExpiresAt(),

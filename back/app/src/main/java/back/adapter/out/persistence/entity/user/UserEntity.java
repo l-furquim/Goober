@@ -3,27 +3,32 @@ package back.adapter.out.persistence.entity.user;
 import back.domain.enums.AccountStatus;
 import back.domain.exception.UserException;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name= "user")
-public class UserEntity {
+@Table(name= "users")
+public class UserEntity implements UserDetails {
 
     @Id
-    @Column(name = "userId")
+    @Column(name = "user_id")
     private UUID userId;
 
-    @Column(name = "userName")
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "userEmail")
+    @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "userPassword")
+    @Column(name = "user_password")
     private String userPassword;
 
-    @Column(name = "userImage")
+    @Column(name = "user_image")
     private String userImage;
 
     @Enumerated(EnumType.STRING)
@@ -97,5 +102,39 @@ public class UserEntity {
         }
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.userPassword;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userEmail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
 

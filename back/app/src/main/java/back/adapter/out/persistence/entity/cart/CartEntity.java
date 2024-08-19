@@ -1,5 +1,6 @@
 package back.adapter.out.persistence.entity.cart;
 
+import back.adapter.out.persistence.entity.product.ProductEntity;
 import back.domain.model.product.Product;
 import jakarta.persistence.*;
 
@@ -12,26 +13,30 @@ import java.util.UUID;
 public class CartEntity {
 
     @Id
-    @Column(name = "cartId")
+    @Column(name = "cart_id")
     private UUID cartId;
 
-    @Column(name = "itemsQuantity")
+    @Column(name = "items_quantity")
     private Integer itemsQuantity;
 
-    @Column(name = "totalPrice")
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
 
-    @Column(name = "userId")
+    @Column(name = "user_id")
     private UUID userId;
 
-    private List<Product> cartProducts;
+    @OneToMany
+    @JoinTable(name = "cart_products",
+    joinColumns = @JoinColumn(name = "cart_id"),
+    inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<ProductEntity> cartProducts;
 
     public CartEntity(){
 
     }
 
-    public CartEntity(UUID cartId, Integer itemsQuantity, BigDecimal totalPrice, UUID userId, List<Product> cartProducts) {
+    public CartEntity(UUID cartId, Integer itemsQuantity, BigDecimal totalPrice, UUID userId, List<ProductEntity> cartProducts) {
         this.cartId = cartId;
         this.itemsQuantity = itemsQuantity;
         this.totalPrice = totalPrice;
@@ -63,11 +68,11 @@ public class CartEntity {
         this.userId = userId;
     }
 
-    public List<Product> getCartEntityProducts(){
+    public List<ProductEntity> getCartEntityProducts(){
         return this.cartProducts;
     }
 
-    public void addToCartEntity(Product product){
+    public void addToCartEntity(ProductEntity product){
         this.cartProducts.add(product);
     }
 

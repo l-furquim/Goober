@@ -8,21 +8,24 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "userVerifier")
+@Table(name = "userverifier")
 public class UserVerifierEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userVerifierId")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "userverifier_id")
     private Long userVerifierId;
 
-    @Column(name = "userVerifierEmail")
+    @Column(name = "userverifier_name")
+    private String userVerifierName;
+
+    @Column(name = "userverifier_email")
     private String userVerifierEmail;
 
-    @Column(name = "userVerifierPassword")
+    @Column(name = "userverifier_password")
     private String userVerifierPassword;
 
-    @Column(name = "expiresAt")
+    @Column(name = "expires_at")
     private Instant expiresAt;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +39,8 @@ public class UserVerifierEntity {
 
     }
 
-    public UserVerifierEntity(String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+    public UserVerifierEntity(String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+        this.userVerifierName = userVerifierName;
         this.userVerifierEmail = userVerifierEmail;
         this.userVerifierPassword = userVerifierPassword;
         this.expiresAt = expiresAt;
@@ -93,10 +97,44 @@ public class UserVerifierEntity {
     }
 
     public static UserVerifierEntity build(User user){
-        return new UserVerifierEntity(user.getUserEmail(),
+        return new UserVerifierEntity(
+                user.getUserName(),
+                user.getUserEmail(),
                 user.getUserPassword(),
                 Instant.now().plusMillis(900000),
                 user.getStatus(),
                 UUID.randomUUID().toString());
+    }
+
+    public String getUserVerifierName() {
+        return userVerifierName;
+    }
+
+    public void setUserVerifierName(String userVerifierName) {
+        this.userVerifierName = userVerifierName;
+    }
+
+    public String getUserVerifierEmail() {
+        return userVerifierEmail;
+    }
+
+    public void setUserVerifierEmail(String userVerifierEmail) {
+        this.userVerifierEmail = userVerifierEmail;
+    }
+
+    public String getUserVerifierPassword() {
+        return userVerifierPassword;
+    }
+
+    public void setUserVerifierPassword(String userVerifierPassword) {
+        this.userVerifierPassword = userVerifierPassword;
+    }
+
+    public Long getUserVerifierId() {
+        return userVerifierId;
+    }
+
+    public void setUserVerifierId(Long userVerifierId) {
+        this.userVerifierId = userVerifierId;
     }
 }

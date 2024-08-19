@@ -17,7 +17,7 @@ public interface AnnouncementService {
     void updateAnnouncementName(UpdateAnnouncementNameRequestDto updateAnnouncementNameRequestDto);
     List<Announcement> findAnnouncementIfContains(String something);
     Optional<List<Announcement>> findAnnouncementByAnnouncerName(String name);
-
+    List<Announcement> findAll();
 
 
 }

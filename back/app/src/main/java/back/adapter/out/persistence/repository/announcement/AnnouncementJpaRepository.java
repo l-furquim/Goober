@@ -16,6 +16,11 @@ public interface AnnouncementJpaRepository extends JpaRepository<AnnouncementEnt
     @Query("SELECT u from AnnouncementEntity u WHERE u.announcementName = :name")
     Optional<List<AnnouncementEntity>> findAnnouncementsByName(@Param("name")String name);
 
+
+    @Query(value = "SELECT * FROM announcement WHERE UPPER(unaccent(announcement_name)) LIKE UPPER(CONCAT('%', unaccent(:name), '%'))", nativeQuery = true)
+    Optional<List<AnnouncementEntity>> findAnnouncementsByUpperName(@Param("name") String name);
+
+
     @Query("SELECT u from AnnouncementEntity u WHERE u.announcerName = :name")
     Optional<List<AnnouncementEntity>> findAnnouncementsByAnnouncerName(@Param("name")String name);
 

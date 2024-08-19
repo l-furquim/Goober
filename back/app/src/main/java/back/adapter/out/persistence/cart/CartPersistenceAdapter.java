@@ -31,7 +31,7 @@ public class CartPersistenceAdapter implements CartRepository {
 
     @Override
     public void delete(Cart cart) {
-        var cartEntity = cartMapper.toEntity(cart);
+        var cartEntity = cartJpaRepository.findById(cart.getCartId());
 
         cartJpaRepository.delete(cartEntity.get());
     }

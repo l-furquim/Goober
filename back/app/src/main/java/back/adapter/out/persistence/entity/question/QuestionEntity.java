@@ -5,30 +5,35 @@ import back.domain.exception.QuestionException;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "question")
 public class QuestionEntity {
 
-    @Column(name = "userName")
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "questionContent")
+    @Column(name = "question_content")
     private String questionContent;
 
     @Id
-    @Column(name = "questionId")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long questionId;
+    @Column(name = "question_id")
+    private UUID questionId;
 
-    @Column(name = "questionStatus")
+    @Column(name = "question_status")
     @Enumerated(EnumType.STRING)
     private QuestionStatus questionStatus;
 
-    @Column(name = "announcementId")
-    private Long announcementId;
+    @Column(name = "announcement_id")
+    private UUID announcementId;
 
+    @OneToMany(mappedBy = "parentQuestion", cascade = CascadeType.ALL)
     List<QuestionEntity> awnswers;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_question_id")
+    private QuestionEntity parentQuestion;
 
     public QuestionEntity(){
 
@@ -56,11 +61,11 @@ public class QuestionEntity {
         this.questionContent = questionContent;
     }
 
-    public Long getQuestionEntityId() {
+    public UUID getQuestionEntityId() {
         return questionId;
     }
 
-    public void setQuestionEntityId(Long questionId) {
+    public void setQuestionEntityId(UUID questionId) {
         this.questionId = questionId;
     }
 
@@ -84,5 +89,45 @@ public class QuestionEntity {
 
     public void setQuestionEntityStatus(QuestionStatus questionStatus) {
         this.questionStatus = questionStatus;
+    }
+
+    public String getQuestionContent() {
+        return questionContent;
+    }
+
+    public void setQuestionContent(String questionContent) {
+        this.questionContent = questionContent;
+    }
+
+    public UUID getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(UUID questionId) {
+        this.questionId = questionId;
+    }
+
+    public QuestionStatus getQuestionStatus() {
+        return questionStatus;
+    }
+
+    public void setQuestionStatus(QuestionStatus questionStatus) {
+        this.questionStatus = questionStatus;
+    }
+
+    public UUID getAnnouncementId() {
+        return announcementId;
+    }
+
+    public void setAnnouncementId(UUID announcementId) {
+        this.announcementId = announcementId;
+    }
+
+    public QuestionEntity getParentQuestion() {
+        return parentQuestion;
+    }
+
+    public void setParentQuestion(QuestionEntity parentQuestion) {
+        this.parentQuestion = parentQuestion;
     }
 }

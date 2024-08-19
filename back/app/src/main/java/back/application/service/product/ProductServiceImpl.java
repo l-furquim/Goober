@@ -1,44 +1,45 @@
 package back.application.service.product;
 
-import back.adapter.in.web.controller.product.dto.ChangeProductNameRequestDto;
-import back.adapter.in.web.controller.product.dto.ChangeProductPriceRequestDto;
-import back.adapter.in.web.controller.product.dto.CreateProductRequestDto;
-import back.adapter.in.web.controller.product.dto.DeleteProductRequestDto;
+import back.adapter.in.web.controller.product.dto.*;
+import back.adapter.out.persistence.mapper.product.ProductMapper;
 import back.domain.exception.ProductException;
 import back.domain.exception.UserException;
 import back.domain.model.product.Product;
 import back.domain.port.in.ProductService;
 import back.domain.port.out.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-
-    public ProductServiceImpl(){
-
-    }
-
 
     @Override
     public Product createProduct(CreateProductRequestDto product) {
         if(product.name().isEmpty()){
             throw new ProductException("Voce nao pode criar um produto sem nome !");
         }
+
+
+
         var newProduct = new Product(
                 UUID.randomUUID(),
                 product.name(),
                 product.price(),
+                product.productCategories(),
                 product.description(),
                 product.productImagePath()
         );
@@ -71,27 +72,37 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Transactional
     @Override
     public void changeProductPrice(ChangeProductPriceRequestDto product) {
-        var aProduct = productRepository.findProductById(product.id());
 
-        if(aProduct.isEmpty()){
-            throw new ProductException("Nao foi possivel alterar o preço, o produto nao existe.");
-        }
+        productRepository.changeProductPrice(product);
 
-        aProduct.get().setProductPrice(BigDecimal.valueOf(product.newPrice()));
     }
-    @Transactional
     @Override
     public void changeProductName(ChangeProductNameRequestDto product) {
+        productRepository.changeProductName(product);
+    }
 
-        var aProduct = productRepository.findProductById(product.id());
+    @Override
+    public Optional<List<Product>> findProductsByCategories(String categories) {
 
-        if(aProduct.isEmpty()){
-            throw new ProductException("Nao foi possivel alterar o nome, o produto nao existe.");
+        var products = productRepository.findProductsByCategories(categories);
+
+        if(products.isEmpty()){
+            return Optional.empty();
         }
 
-        aProduct.get().setProductName(product.newName());
+
+        return products;
+    }
+    @Override
+    public Optional<List<Product>> findProductsByNameAndPriceFilter(FindProductsByNameAndPriceFilterRequesDto productss){
+
+        var products = productRepository.findProductsByNameAndPriceFilter(productss.name(),BigDecimal.valueOf(productss.price()));
+
+        if(products.isPresent()){
+            return products;
+        }
+        return Optional.empty();
     }
 }

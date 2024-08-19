@@ -1,6 +1,7 @@
 package back.adapter.out.persistence.repository.product;
 
 import back.adapter.out.persistence.entity.product.ProductEntity;
+import back.domain.enums.ProductCategories;
 import back.domain.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,7 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, UUID>
 
     @Query("SELECT u FROM ProductEntity u WHERE u.productName =:name AND u.productPrice = :price")
     Optional<List<ProductEntity>> findProductByNameAndPriceFilter(@Param("name") String name, @Param("price")BigDecimal price);
+
+    @Query("SELECT u FROM ProductEntity u WHERE u.productCategories =:categories")
+    Optional<List<ProductEntity>> findProductsByCategorie(@Param("categories") ProductCategories name);
 }

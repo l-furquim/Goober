@@ -2,41 +2,40 @@ package back.domain.model.userVerifier;
 
 import back.domain.enums.AccountStatus;
 import back.domain.model.user.User;
-import jakarta.persistence.*;
+
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
-@Table(name = "userVerifier")
 public class UserVerifier {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userVerifierId")
+
+
     private Long userVerifierId;
 
-    @Column(name = "userVerifierEmail")
+    private String userVerifierName;
+
     private String userVerifierEmail;
 
-    @Column(name = "userVerifierPassword")
+
     private String userVerifierPassword;
 
-    @Column(name = "expiresAt")
+
     private Instant expiresAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+
+
     private AccountStatus status;
 
-    @Column(name = "code")
+
     private String code;
 
     public UserVerifier(){
 
     }
 
-    public UserVerifier(String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+    public UserVerifier(String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+        this.userVerifierName = userVerifierName;
         this.userVerifierEmail = userVerifierEmail;
         this.userVerifierPassword = userVerifierPassword;
         this.expiresAt = expiresAt;
@@ -93,10 +92,18 @@ public class UserVerifier {
     }
 
     public static UserVerifier build(User user){
-        return new UserVerifier(user.getUserEmail(),
+        return new UserVerifier(user.getUserName(),user.getUserEmail(),
                 user.getUserPassword(),
                 Instant.now().plusMillis(900000),
                 user.getStatus(),
                 UUID.randomUUID().toString());
+    }
+
+    public String getUserVerifierName() {
+        return userVerifierName;
+    }
+
+    public void setUserVerifierName(String userVerifierName) {
+        this.userVerifierName = userVerifierName;
     }
 }
