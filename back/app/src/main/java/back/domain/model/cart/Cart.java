@@ -73,5 +73,9 @@ public class Cart {
         return this.cartId;
     }
 
+    public List<Product> getProducts(){
+        return this.cartProducts;
+    }
+
 
 }

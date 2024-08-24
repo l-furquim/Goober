@@ -15,7 +15,7 @@ public interface AnnouncementService {
     void deleteAnnouncement(DeleteAnnouncementRequestDto deleteAnnouncementRequestDto);
     void updateAnnouncementPrice(UpdateAnnouncementPriceRequestDto updateAnnouncementPriceRequestDto);
     void updateAnnouncementName(UpdateAnnouncementNameRequestDto updateAnnouncementNameRequestDto);
-    List<Announcement> findAnnouncementIfContains(String something);
+    List<Announcement> findAnnouncementNamePriceFilter(String something, Double lowPrice, Double highPrice);
     Optional<List<Announcement>> findAnnouncementByAnnouncerName(String name);
     List<Announcement> findAll();
 

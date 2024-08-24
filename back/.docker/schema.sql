@@ -55,8 +55,7 @@ create table userVerifier (
 create table announcement_products (
 id serial primary key,
 announcement_id uuid not null,
-product_id uuid not null,
-
+product_id uuid not null
 );
 
 create table announcement_questions (

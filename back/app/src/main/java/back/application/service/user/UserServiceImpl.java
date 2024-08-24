@@ -60,7 +60,8 @@ public class UserServiceImpl implements UserService {
 
 
         UserVerifier userVerifierJpaEntity = new UserVerifier(
-                registerUserRequestDto.userName(),registerUserRequestDto.userEmail(), passwordEncoder.encode(registerUserRequestDto.userPassword())
+               UUID.randomUUID(), registerUserRequestDto.userName(),registerUserRequestDto.userEmail(), passwordEncoder.encode(
+                registerUserRequestDto.userPassword())
                 , Instant.now().plusMillis(6000000), AccountStatus.PENDING, UUID.randomUUID().toString());
 
         try{
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
 
         var User = new User(
-                UUID.randomUUID(), aUserVerifier.get().getUserVerifierName(),
+                aUserVerifier.get().getUserVerifierId(), aUserVerifier.get().getUserVerifierName(),
                 aUserVerifier.get().getUserVerifierEmail(), aUserVerifier.get().getUserVerifierPassword(),
                 "woiew", AccountStatus.ACTIVE);
 

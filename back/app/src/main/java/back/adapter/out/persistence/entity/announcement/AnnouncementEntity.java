@@ -55,7 +55,8 @@ public class AnnouncementEntity {
 
     }
 
-    public AnnouncementEntity(BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerName, String productImages, List<ProductEntity> products) {
+    public AnnouncementEntity(UUID announcementID ,BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerName, String productImages, List<ProductEntity> products) {
+       this.announcementId = announcementID;
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
         this.announcementName = announcementName;
@@ -153,6 +154,8 @@ public class AnnouncementEntity {
     }
 
 
-
+    public void setAnnouncementQuestions(QuestionEntity question){
+        productQuestions.add(question);
+    }
 
 }

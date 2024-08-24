@@ -1,4 +1,6 @@
 package back.adapter.in.web.controller.announcement.dto;
 
-public record DeleteAnnouncementRequestDto(Integer id) {
+import java.util.UUID;
+
+public record DeleteAnnouncementRequestDto(UUID id) {
 }

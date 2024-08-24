@@ -5,6 +5,7 @@ import back.domain.exception.QuestionException;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class Question {
@@ -18,6 +19,7 @@ public class Question {
 
     private Long questionId;
 
+    private UUID announcementId;
 
     private QuestionStatus questionStatus;
 
@@ -79,4 +81,13 @@ public class Question {
     public void setQuestionStatus(QuestionStatus questionStatus) {
         this.questionStatus = questionStatus;
     }
+
+    public void setAnnouncementId(UUID id){
+        this.announcementId = id;
+    }
+
+    public UUID getAnnouncementId(){
+        return this.announcementId;
+    }
+
 }

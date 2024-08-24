@@ -2,6 +2,7 @@ package back.adapter.out.persistence.announcement;
 
 import back.adapter.out.persistence.mapper.announcement.AnnouncementMapper;
 import back.adapter.out.persistence.repository.announcement.AnnouncementJpaRepository;
+import back.adapter.out.persistence.repository.product.ProductJpaRepository;
 import back.domain.model.announcement.Announcement;
 import back.domain.port.out.AnnouncementRepository;
 import org.slf4j.Logger;
@@ -9,24 +10,35 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import static java.awt.SystemColor.text;
 
 @Component
 public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
 
     private static final Logger log = LoggerFactory.getLogger(AnnouncementPersistenceAdapter.class);
+
     private final AnnouncementMapper announcementMapper;
     private final AnnouncementJpaRepository announcementJpaRepository;
+    private final ProductJpaRepository productJpaRepository;
 
-    public AnnouncementPersistenceAdapter(AnnouncementMapper announcementMapper, AnnouncementJpaRepository announcementJpaRepository) {
+    public AnnouncementPersistenceAdapter(AnnouncementMapper announcementMapper, AnnouncementJpaRepository announcementJpaRepository, ProductJpaRepository productJpaRepository) {
         this.announcementMapper = announcementMapper;
         this.announcementJpaRepository = announcementJpaRepository;
+        this.productJpaRepository = productJpaRepository;
     }
 
     @Override
     public void save(Announcement announcement) {
-        var anEntity = announcementMapper.toEntity(announcement);
+        var producEntityList = announcement.getProducts().stream().map(prod
+        -> productJpaRepository.findById(prod.getProductId()).get()).toList();
+
+
+        var anEntity = announcementMapper.toEntity(announcement, producEntityList);
 
         log.info(announcement.getProducts().toString());
 
@@ -35,7 +47,9 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
 
     @Override
     public void delete(Announcement announcement) {
-        var anEntity = announcementMapper.toEntity(announcement);
+
+
+        var anEntity = announcementJpaRepository.findById(UUID.fromString(announcement.getAnnouncerId()));
 
 
 
@@ -43,7 +57,7 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
     }
 
     @Override
-    public Optional<Announcement> findAnnouncementById(Integer id) {
+    public Optional<Announcement> findAnnouncementById(UUID id) {
         var anEntity =  announcementJpaRepository.findById(id);
 
         if(anEntity.isEmpty()){
@@ -87,8 +101,11 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
     }
 
     @Override
-    public Optional<List<Announcement>> findAnnouncementByUpperName(String name) {
-        var ansEntity = announcementJpaRepository.findAnnouncementsByUpperName(name);
+    public Optional<List<Announcement>> findAnnouncementNamePriceFilter(String name, Double lowPrice, Double highPrice) {
+
+        var textFormatted = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+
+        var ansEntity = announcementJpaRepository.findAnnouncementsByUpperNameAndPrice(textFormatted, BigDecimal.valueOf(lowPrice), BigDecimal.valueOf(highPrice));
 
         if(ansEntity.isEmpty()){
             return Optional.empty();
@@ -96,6 +113,7 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
 
         return Optional.of(ansEntity.get().stream().map(ann -> announcementMapper.toDomain(ann).get()).toList());
     }
+
 
     @Override
     public List<Announcement> findAll() {
@@ -105,4 +123,11 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
         return announces.stream().map(ann -> announcementMapper.toDomain(ann).get()).toList();
 
     }
+
+    @Override
+    public List<Announcement> findAllWithFilter() {
+        return null;
+    }
+
+
 }

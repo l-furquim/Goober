@@ -39,6 +39,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
 
         var announcement = new Announcement(
+                UUID.randomUUID(),
                BigDecimal.valueOf(createAnnouncementRequestDto.price()),
                 createAnnouncementRequestDto.name(),
                 0,
@@ -102,7 +103,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public List<Announcement> findAnnouncementIfContains(String something) {
+    public List<Announcement> findAnnouncementNamePriceFilter(String something, Double lowPrice, Double highPrice) {
         var arrayOfWords = something.split(" ");
 
         var listOfWords = Arrays.stream(arrayOfWords).toList();
@@ -110,12 +111,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         List<Announcement> list = new ArrayList<Announcement>();
         for(String word: listOfWords){
-            var announcementsList = announcementRepository.findAnnouncementByUpperName(word);
+            var announcementsList = announcementRepository.findAnnouncementNamePriceFilter(word, lowPrice, highPrice);
 
 
             log.info(word);
             if(announcementsList.isPresent()){
-                announcementsList.get().addAll(announcementsList.get());
+                list.addAll(announcementsList.get());
             }
         }
         return list;

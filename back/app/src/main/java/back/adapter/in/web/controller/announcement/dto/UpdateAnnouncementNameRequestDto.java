@@ -1,4 +1,6 @@
 package back.adapter.in.web.controller.announcement.dto;
 
-public record UpdateAnnouncementNameRequestDto(Integer id, String newName) {
+import java.util.UUID;
+
+public record UpdateAnnouncementNameRequestDto(UUID id, String newName) {
 }

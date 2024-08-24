@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Announcement {
 
 
-    private Long announcementId;
+    private UUID announcementId;
 
 
     private String announcementName;
@@ -42,7 +42,8 @@ public class Announcement {
 
     }
 
-    public Announcement(BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products) {
+    public Announcement(UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products) {
+        this.announcementId = announcementId;
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
         this.announcementName = announcementName;
@@ -52,11 +53,11 @@ public class Announcement {
         this.products = products;
     }
 
-    public Long getAnnouncementId() {
+    public UUID getAnnouncementId() {
         return announcementId;
     }
 
-    public void setAnnouncementId(Long announcementId) {
+    public void setAnnouncementId(UUID announcementId) {
         this.announcementId = announcementId;
     }
 

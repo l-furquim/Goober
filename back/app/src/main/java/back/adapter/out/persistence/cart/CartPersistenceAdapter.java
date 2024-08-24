@@ -2,6 +2,7 @@ package back.adapter.out.persistence.cart;
 
 import back.adapter.out.persistence.mapper.cart.CartMapper;
 import back.adapter.out.persistence.repository.cart.CartJpaRepository;
+import back.adapter.out.persistence.repository.product.ProductJpaRepository;
 import back.domain.model.cart.Cart;
 import back.domain.port.out.CartRepository;
 import org.springframework.stereotype.Component;
@@ -15,16 +16,20 @@ public class CartPersistenceAdapter implements CartRepository {
 
     private final CartMapper cartMapper;
     private final CartJpaRepository cartJpaRepository;
+    private final ProductJpaRepository productJpaRepository;
 
-    public CartPersistenceAdapter(CartMapper cartMapper, CartJpaRepository cartJpaRepository) {
+    public CartPersistenceAdapter(CartMapper cartMapper, CartJpaRepository cartJpaRepository, ProductJpaRepository productJpaRepository) {
         this.cartMapper = cartMapper;
         this.cartJpaRepository = cartJpaRepository;
+        this.productJpaRepository = productJpaRepository;
     }
-
 
     @Override
     public void save(Cart cart) {
-        var cartEntity = cartMapper.toEntity(cart);
+        var prodListEntity = cart.getCartProducts().stream().map(
+                prod -> productJpaRepository.findById(prod.getProductId()).get()).toList();
+
+        var cartEntity = cartMapper.toEntity(cart, prodListEntity);
 
         cartJpaRepository.save(cartEntity.get());
     }

@@ -14,7 +14,7 @@ public class UserVerifierEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userverifier_id")
-    private Long userVerifierId;
+    private UUID userVerifierId;
 
     @Column(name = "userverifier_name")
     private String userVerifierName;
@@ -39,7 +39,8 @@ public class UserVerifierEntity {
 
     }
 
-    public UserVerifierEntity(String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+    public UserVerifierEntity(UUID userVerifierId,String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+        this.userVerifierId = userVerifierId;
         this.userVerifierName = userVerifierName;
         this.userVerifierEmail = userVerifierEmail;
         this.userVerifierPassword = userVerifierPassword;
@@ -48,11 +49,11 @@ public class UserVerifierEntity {
         this.code = code;
     }
 
-    public Long getUserVerifierEntityId() {
+    public UUID getUserVerifierEntityId() {
         return userVerifierId;
     }
 
-    public void setUserVerifierEntityId(Long userVerifierId) {
+    public void setUserVerifierEntityId(UUID userVerifierId) {
         this.userVerifierId = userVerifierId;
     }
 
@@ -98,6 +99,7 @@ public class UserVerifierEntity {
 
     public static UserVerifierEntity build(User user){
         return new UserVerifierEntity(
+                user.getUserId(),
                 user.getUserName(),
                 user.getUserEmail(),
                 user.getUserPassword(),
@@ -130,11 +132,11 @@ public class UserVerifierEntity {
         this.userVerifierPassword = userVerifierPassword;
     }
 
-    public Long getUserVerifierId() {
+    public UUID getUserVerifierId() {
         return userVerifierId;
     }
 
-    public void setUserVerifierId(Long userVerifierId) {
+    public void setUserVerifierId(UUID userVerifierId) {
         this.userVerifierId = userVerifierId;
     }
 }

@@ -1,6 +1,7 @@
 package back.adapter.out.persistence.question;
 
 import back.adapter.out.persistence.mapper.question.QuestionMapper;
+import back.adapter.out.persistence.repository.announcement.AnnouncementJpaRepository;
 import back.adapter.out.persistence.repository.question.QuestionJpaRepository;
 import back.domain.model.question.Question;
 import back.domain.port.out.QuestionRepository;
@@ -14,18 +15,22 @@ public class QuestionPersistenceAdapter implements QuestionRepository {
 
     private final QuestionMapper questionMapper;
     private final QuestionJpaRepository questionJpaRepository;
+    private final AnnouncementJpaRepository announcementJpaRepository;
 
-    public QuestionPersistenceAdapter(QuestionMapper questionMapper, QuestionJpaRepository questionJpaRepository) {
+    public QuestionPersistenceAdapter(QuestionMapper questionMapper, QuestionJpaRepository questionJpaRepository, AnnouncementJpaRepository announcementJpaRepository) {
         this.questionMapper = questionMapper;
         this.questionJpaRepository = questionJpaRepository;
+        this.announcementJpaRepository = announcementJpaRepository;
     }
-
 
     @Override
     public void save(Question question) {
         var qEntity = questionMapper.toEntity(question);
 
+        var announcementEntity = announcementJpaRepository.findById(question.getAnnouncementId());
+
         questionJpaRepository.save(qEntity.get());
+        announcementEntity.get().setAnnouncementQuestions(qEntity.get());
     }
 
     @Override

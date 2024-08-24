@@ -1,4 +1,6 @@
 package back.adapter.in.web.controller.announcement.dto;
 
-public record UpdateAnnouncementPriceRequestDto(Integer id, Float newPrice) {
+import java.util.UUID;
+
+public record UpdateAnnouncementPriceRequestDto(UUID id, Float newPrice) {
 }

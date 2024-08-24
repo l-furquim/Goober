@@ -11,7 +11,7 @@ public class UserVerifier {
 
 
 
-    private Long userVerifierId;
+    private UUID userVerifierId;
 
     private String userVerifierName;
 
@@ -34,7 +34,8 @@ public class UserVerifier {
 
     }
 
-    public UserVerifier(String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+    public UserVerifier(UUID userVerifierid ,String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+        this.userVerifierId = userVerifierid;
         this.userVerifierName = userVerifierName;
         this.userVerifierEmail = userVerifierEmail;
         this.userVerifierPassword = userVerifierPassword;
@@ -43,11 +44,11 @@ public class UserVerifier {
         this.code = code;
     }
 
-    public Long getUserVerifierId() {
+    public UUID getUserVerifierId() {
         return userVerifierId;
     }
 
-    public void setUserVerifierId(Long userVerifierId) {
+    public void setUserVerifierId(UUID userVerifierId) {
         this.userVerifierId = userVerifierId;
     }
 
@@ -92,7 +93,9 @@ public class UserVerifier {
     }
 
     public static UserVerifier build(User user){
-        return new UserVerifier(user.getUserName(),user.getUserEmail(),
+        return new UserVerifier(
+                user.getUserId(),
+                user.getUserName(),user.getUserEmail(),
                 user.getUserPassword(),
                 Instant.now().plusMillis(900000),
                 user.getStatus(),

@@ -8,36 +8,36 @@ import back.domain.exception.QuestionException;
 import back.domain.exception.UserException;
 import back.domain.model.question.Question;
 import back.domain.port.in.QuestionService;
+import back.domain.port.out.AnnouncementRepository;
 import back.domain.port.out.QuestionRepository;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
-    private QuestionRepository questionRepository;
 
-    public QuestionServiceImpl(){
-
-    }
+    private final QuestionRepository questionRepository;
 
     public QuestionServiceImpl(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
-
     @Override
     public Question makeAQuestion(MakeAQuestionRequestDto makeAQuestionRequestDto) {
-        if(makeAQuestionRequestDto.content().isEmpty()){
+        if(makeAQuestionRequestDto.content().isEmpty()) {
             throw new QuestionException("Nao e possivel fazer uma pergunta em branco.");
         }
-
         var question = new Question(
                 makeAQuestionRequestDto.userName(),
                 makeAQuestionRequestDto.content(),
                 QuestionStatus.NOTANSWERED
         );
+
+        question.setAnnouncementId(UUID.fromString(makeAQuestionRequestDto.announcementId()));
 
         try{
             questionRepository.save(question);
