@@ -4,9 +4,12 @@ import back.adapter.out.persistence.mapper.cart.CartMapper;
 import back.adapter.out.persistence.repository.cart.CartJpaRepository;
 import back.adapter.out.persistence.repository.product.ProductJpaRepository;
 import back.domain.model.cart.Cart;
+import back.domain.model.product.Product;
 import back.domain.port.out.CartRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,5 +62,26 @@ public class CartPersistenceAdapter implements CartRepository {
             return Optional.empty();
         }
         return Optional.of(cartEntity.get().stream().map(cart -> cartMapper.toDomain(cart).get()).toList());
+    }
+
+    @Transactional
+    @Override
+    public void updateCartTotalPrice(BigDecimal totalPrice, String cartId, List<Product> product) {
+
+        var cartEntity = cartJpaRepository.findById(UUID.fromString(cartId));
+        var productsEntity = product.stream().map(prod -> productJpaRepository
+                .findById(prod.getProductId()).get()).toList();
+
+
+        if(cartEntity.isPresent()){
+
+            for(int i=0; i< product.size(); i++){
+                cartEntity.get().addProductToCart(productsEntity.get(i));
+
+                cartEntity.get().setTotalPrice(cartEntity.get().getTotalPrice().add(totalPrice));
+            }
+
+        }
+
     }
 }

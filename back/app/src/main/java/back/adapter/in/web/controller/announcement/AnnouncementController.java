@@ -34,7 +34,7 @@ public class AnnouncementController {
 
         return ResponseEntity.ok().body(new CreateAnnouncementResponseDto("Anuncio criado com sucesso"));
     }
-    @GetMapping("/find/search={words}/price={lowPrice}-{highPrice}")
+    @GetMapping("/find/search={words}/price={lowPrice}/{highPrice}")
     public ResponseEntity<FindAnnouncementIfContainsResponseDto> findAnnouncementIfContains(@PathVariable("words")
                                                                                             String words, @PathVariable
                                                                                             ("lowPrice") Double lowPrice,
@@ -52,6 +52,16 @@ public class AnnouncementController {
 
         return ResponseEntity.ok().body(new FindAllAnnouncementsResponseDto(announces));
     }
+
+    @GetMapping("/find/search={words}")
+    public ResponseEntity<FindAnnouncementIfContainsResponseDto> findAnnouncementIfContainsName(@PathVariable("words") String words){
+
+        var announcements = announcementService.findAnnouncementNameFilter(words);
+
+        return ResponseEntity.ok().body(new FindAnnouncementIfContainsResponseDto(announcements));
+    }
+
+
 
 
 

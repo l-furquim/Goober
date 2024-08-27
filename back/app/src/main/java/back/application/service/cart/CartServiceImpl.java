@@ -9,27 +9,27 @@ import back.domain.model.cart.Cart;
 import back.domain.model.product.Product;
 import back.domain.port.in.CartService;
 import back.domain.port.out.CartRepository;
+import back.domain.port.out.ProductRepository;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class CartServiceImpl implements CartService {
 
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
-    public CartServiceImpl() {
-    }
 
     public CartServiceImpl(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
     }
 
     @Override
-    public Cart createCart(CreateCartRequestDto createCartRequestDto) {
+    public Cart createCart(CreateCartRequestDto createCartRequestDto, String id) {
         if(createCartRequestDto.productList().isEmpty()){
             throw new CartException("Voce nao pode criar um carrinho sem possuir produtos.");
         }
@@ -40,7 +40,7 @@ public class CartServiceImpl implements CartService {
                 UUID.randomUUID(),
                 createCartRequestDto.productList().size(),
                 totalprice,
-                UUID.fromString(createCartRequestDto.id()),
+                UUID.fromString(id),
                 createCartRequestDto.productList()
         );
 
@@ -72,12 +72,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addProductToCart(Cart cart,List<Product> product) {
+    public void addProductToCart(String cartId, List<Product> product) {
 
-        for(int i=0; i< product.size(); i++){
-            cart.addToCart(product.get(i));
-        }
+            var newPrice = calculateTotalPrice(product);
 
+            cartRepository.updateCartTotalPrice(newPrice, cartId,product);
     }
 
     @Override
@@ -89,5 +88,16 @@ public class CartServiceImpl implements CartService {
         }
 
         return totalPrice;
+    }
+
+    @Override
+    public void finishCart(String cartId) {
+
+        var cart = cartRepository.findCartById(UUID.fromString(cartId));
+
+        if(cart.isPresent()) {
+
+            cartRepository.delete(cart.get());
+        }
     }
 }

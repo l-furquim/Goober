@@ -129,5 +129,18 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
         return null;
     }
 
+    @Override
+    public Optional<List<Announcement>> findAnnouncewmentNameFilter(String name) {
+        var textFormatted = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+
+        var ansEntity = announcementJpaRepository.findAnnouncementsByUpperNameFilter(textFormatted);
+
+        if(ansEntity.isEmpty()){
+            return Optional.empty();
+        }
+
+        return Optional.of(ansEntity.get().stream().map(ann -> announcementMapper.toDomain(ann).get()).toList());
+    }
+
 
 }

@@ -21,6 +21,8 @@ public interface AnnouncementJpaRepository extends JpaRepository<AnnouncementEnt
     @Query("SELECT a FROM AnnouncementEntity a WHERE UPPER(a.announcementName) LIKE UPPER(CONCAT('%', :name, '%')) AND a.announcementPrice BETWEEN :lowPrice AND :highPrice")
     Optional<List<AnnouncementEntity>> findAnnouncementsByUpperNameAndPrice(@Param("name") String name, @Param("lowPrice") BigDecimal lowPrice ,@Param("highPrice") BigDecimal highPrice);
 
+    @Query("SELECT a FROM AnnouncementEntity a WHERE UPPER(a.announcementName) LIKE UPPER(CONCAT('%', :name, '%'))")
+    Optional<List<AnnouncementEntity>> findAnnouncementsByUpperNameFilter(@Param("name") String name);
 
 
     @Query("SELECT u from AnnouncementEntity u WHERE u.announcerName = :name")

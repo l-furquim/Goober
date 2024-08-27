@@ -105,21 +105,30 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public List<Announcement> findAnnouncementNamePriceFilter(String something, Double lowPrice, Double highPrice) {
         var arrayOfWords = something.split(" ");
-
         var listOfWords = Arrays.stream(arrayOfWords).toList();
+        List<Announcement> uniqueAnnouncements = new ArrayList<>();
 
+        for (String singleWord : listOfWords) {
+            var announcementsList = announcementRepository.findAnnouncementNamePriceFilter(singleWord, lowPrice,highPrice);
 
-        List<Announcement> list = new ArrayList<Announcement>();
-        for(String word: listOfWords){
-            var announcementsList = announcementRepository.findAnnouncementNamePriceFilter(word, lowPrice, highPrice);
+            if (announcementsList.isPresent()) {
+                for (Announcement a : announcementsList.get()) {
+                    boolean alreadyExists = false;
 
-
-            log.info(word);
-            if(announcementsList.isPresent()){
-                list.addAll(announcementsList.get());
+                    for (Announcement an : uniqueAnnouncements) {
+                        if (a.getAnnouncementId().equals(an.getAnnouncementId())) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyExists) {
+                        uniqueAnnouncements.add(a);
+                    }
+                }
             }
         }
-        return list;
+
+        return uniqueAnnouncements;
     }
 
     @Override
@@ -130,5 +139,34 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public List<Announcement> findAll() {
         return announcementRepository.findAll();
+    }
+
+    @Override
+    public List<Announcement> findAnnouncementNameFilter(String word) {
+        var arrayOfWords = word.split(" ");
+        var listOfWords = Arrays.stream(arrayOfWords).toList();
+        List<Announcement> uniqueAnnouncements = new ArrayList<>();
+
+        for (String singleWord : listOfWords) {
+            var announcementsList = announcementRepository.findAnnouncewmentNameFilter(singleWord);
+
+            if (announcementsList.isPresent()) {
+                for (Announcement a : announcementsList.get()) {
+                    boolean alreadyExists = false;
+
+                    for (Announcement an : uniqueAnnouncements) {
+                        if (a.getAnnouncementId().equals(an.getAnnouncementId())) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyExists) {
+                        uniqueAnnouncements.add(a);
+                    }
+                }
+            }
+        }
+
+        return uniqueAnnouncements;
     }
 }

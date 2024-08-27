@@ -18,6 +18,6 @@ public interface AnnouncementService {
     List<Announcement> findAnnouncementNamePriceFilter(String something, Double lowPrice, Double highPrice);
     Optional<List<Announcement>> findAnnouncementByAnnouncerName(String name);
     List<Announcement> findAll();
-
+    List<Announcement> findAnnouncementNameFilter(String word);
 
 }

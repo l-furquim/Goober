@@ -17,4 +17,5 @@ public interface AnnouncementRepository {
     Optional<List<Announcement>> findAnnouncementNamePriceFilter(String name, Double lowPrice, Double highPrice);
     List<Announcement> findAll();
     List<Announcement> findAllWithFilter();
+    Optional<List<Announcement>> findAnnouncewmentNameFilter(String name);
 }

@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface CartService {
 
-    Cart createCart(CreateCartRequestDto createCartRequestDto);
+    Cart createCart(CreateCartRequestDto createCartRequestDto, String id);
     void deleteCart(DeleteCartRequestDto deleteCartRequestDto);
-    void addProductToCart(Cart cart,List<Product> product);
+    void addProductToCart(String cartId, List<Product> product);
     BigDecimal calculateTotalPrice(List<Product> productList);
-
+    void finishCart(String cartId);
 }

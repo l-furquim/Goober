@@ -80,5 +80,9 @@ public class CartEntity {
         return this.cartId;
     }
 
+    public void addProductToCart(ProductEntity product){
+        this.cartProducts.add(product);
+    }
+
 
 }
