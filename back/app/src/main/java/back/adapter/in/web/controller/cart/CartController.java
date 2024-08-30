@@ -25,7 +25,7 @@ public class CartController {
         return ResponseEntity.ok().body(new CreateCartResponseDto("carrinho criado com sucesso"));
     }
 
-    @PostMapping("/finish/{cartId}")
+    @DeleteMapping("/finish/{cartId}")
     public ResponseEntity<FinishCartResponseDto> finishCart(@PathVariable("cartId")String cartId){
 
         cartService.finishCart(cartId);

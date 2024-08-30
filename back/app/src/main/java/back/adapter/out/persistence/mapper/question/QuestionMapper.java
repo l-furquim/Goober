@@ -14,6 +14,7 @@ public class QuestionMapper {
 
     public static Optional<QuestionEntity> toEntity(Question question){
         return Optional.of(new QuestionEntity(
+                question.getAnnouncementId(),
                 question.getUserName(),
                 question.getQuestionContent(),
                 question.getQuestionStatus()
@@ -22,6 +23,7 @@ public class QuestionMapper {
 
     public static Optional<Question> toDomain(QuestionEntity question){
         return Optional.of(new Question(
+                question.getAnnouncementId(),
                 question.getUserName(),
                 question.getQuestionEntityContent(),
                 question.getQuestionEntityStatus()

@@ -19,7 +19,8 @@ public class QuestionEntity {
 
     @Id
     @Column(name = "question_id")
-    private UUID questionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long questionId;
 
     @Column(name = "question_status")
     @Enumerated(EnumType.STRING)
@@ -28,18 +29,20 @@ public class QuestionEntity {
     @Column(name = "announcement_id")
     private UUID announcementId;
 
-    @OneToMany(mappedBy = "parentQuestion", cascade = CascadeType.ALL)
+    @OneToMany
+    @JoinTable(
+            name = "question_answers",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "answer_id"))
     List<QuestionEntity> awnswers;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_question_id")
-    private QuestionEntity parentQuestion;
 
     public QuestionEntity(){
 
     }
 
-    public QuestionEntity(String userName, String questionContent, QuestionStatus questionStatus) {
+    public QuestionEntity(UUID announcementId, String userName, String questionContent, QuestionStatus questionStatus) {
+        this.announcementId = announcementId;
         this.userName = userName;
         this.questionContent = questionContent;
         this.questionStatus = questionStatus;
@@ -61,11 +64,11 @@ public class QuestionEntity {
         this.questionContent = questionContent;
     }
 
-    public UUID getQuestionEntityId() {
+    public Long getQuestionEntityId() {
         return questionId;
     }
 
-    public void setQuestionEntityId(UUID questionId) {
+    public void setQuestionEntityId( Long questionId) {
         this.questionId = questionId;
     }
 
@@ -99,11 +102,11 @@ public class QuestionEntity {
         this.questionContent = questionContent;
     }
 
-    public UUID getQuestionId() {
+    public Long getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(UUID questionId) {
+    public void setQuestionId(Long questionId) {
         this.questionId = questionId;
     }
 
@@ -121,13 +124,5 @@ public class QuestionEntity {
 
     public void setAnnouncementId(UUID announcementId) {
         this.announcementId = announcementId;
-    }
-
-    public QuestionEntity getParentQuestion() {
-        return parentQuestion;
-    }
-
-    public void setParentQuestion(QuestionEntity parentQuestion) {
-        this.parentQuestion = parentQuestion;
     }
 }

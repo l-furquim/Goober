@@ -30,7 +30,8 @@ public class Question {
 
     }
 
-    public Question(String userName, String questionContent, QuestionStatus questionStatus) {
+    public Question(UUID announcementId,String userName, String questionContent, QuestionStatus questionStatus) {
+        this.announcementId =announcementId;
         this.userName = userName;
         this.questionContent = questionContent;
         this.questionStatus = questionStatus;
@@ -70,8 +71,8 @@ public class Question {
         return awnswers;
     }
 
-    public void setAwnswers(List<Question> awnswers) {
-        this.awnswers = awnswers;
+    public void setAwnswers(Question question) {
+        this.awnswers.add(question);
     }
 
     public QuestionStatus getQuestionStatus() {

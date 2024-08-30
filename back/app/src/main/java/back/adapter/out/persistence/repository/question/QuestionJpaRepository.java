@@ -9,10 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Long> {
 
     @Query("SELECT q FROM QuestionEntity q WHERE q.userName = :name")
     Optional<List<QuestionEntity>> findQuestionsByUserName(@Param("name") String name);
+
+    @Query("SELECT q FROM QuestionEntity q where q.announcementId = :announcementId")
+    Optional<List<QuestionEntity>> findQuestionsByAnnouncementId(@Param("announcementId") UUID id);
 }

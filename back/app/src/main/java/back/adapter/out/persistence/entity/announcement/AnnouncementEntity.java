@@ -141,8 +141,8 @@ public class AnnouncementEntity {
         this.announcerName = announcerName;
     }
 
-    public void setProductQuestions(List<QuestionEntity> productQuestions) {
-        this.productQuestions = productQuestions;
+    public void setProductQuestions(QuestionEntity question) {
+        this.productQuestions.add( question);
     }
 
     public String getAnnouncementEntityName() {

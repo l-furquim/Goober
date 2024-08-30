@@ -9,11 +9,10 @@ create table users (
 
 create table question (
        "user_name" varchar(255) not null,
-       "announcement_id" bigint not null,
+       "announcement_id" uuid not null,
        "question_content" varchar(255) not null,
        "question_id" bigint primary key not null ,
-       "question_status" varchar(255) not null,
-        "parent_question_id" bigint
+       "question_status" varchar(255) not null
 );
 
 create table product (

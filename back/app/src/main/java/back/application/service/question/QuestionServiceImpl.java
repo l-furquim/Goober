@@ -14,6 +14,9 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,13 +35,11 @@ public class QuestionServiceImpl implements QuestionService {
             throw new QuestionException("Nao e possivel fazer uma pergunta em branco.");
         }
         var question = new Question(
+                UUID.fromString(makeAQuestionRequestDto.announcementId()),
                 makeAQuestionRequestDto.userName(),
                 makeAQuestionRequestDto.content(),
                 QuestionStatus.NOTANSWERED
         );
-
-        question.setAnnouncementId(UUID.fromString(makeAQuestionRequestDto.announcementId()));
-
         try{
             questionRepository.save(question);
         }catch (IllegalArgumentException e){
@@ -73,9 +74,24 @@ public class QuestionServiceImpl implements QuestionService {
 
         question.get().setQuestionStatus(QuestionStatus.ANSWERED);
         var asnwerer = new Question(
+                question.get().getAnnouncementId(),
                 awnswerAQuestionRequestDto.userName(),
                 awnswerAQuestionRequestDto.content(),
                 QuestionStatus.NOTANSWERED
         );
+
+        question.get().setAwnswers(asnwerer);
     }
+
+    @Override
+    public List<Question> getQuestionsByAnnouncementId(UUID id) {
+        var questions = questionRepository.findQuestionsByAnnouncementId(id);
+
+        if(questions.isEmpty()){
+            return questions.get();
+        }
+        return new ArrayList<Question>();
+    }
+
+
 }
