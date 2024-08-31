@@ -2,7 +2,6 @@ package back.adapter.in.web.controller.cart;
 
 import back.adapter.in.web.controller.cart.dto.*;
 import back.domain.port.in.CartService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
+
+
     private final CartService cartService;
+
 
     @Autowired
     public CartController(CartService cartService) {
@@ -42,7 +44,6 @@ public class CartController {
 
         return ResponseEntity.ok().body(new AddProductToCartResponseDto("produto adicionado com sucesso"));
     }
-
 
 
 

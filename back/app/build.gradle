@@ -14,7 +14,6 @@ plugins {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
@@ -29,6 +28,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.3.1'
+
 
     implementation 'com.google.guava:guava:31.0.1-jre'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
