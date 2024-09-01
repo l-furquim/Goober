@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {ShoppingCartIcon } from "lucide-react";
+import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
 
 
 
@@ -28,7 +29,9 @@ const RegisterFormShema = z.object({
 
         const [message, setMessage] = useState<React.ReactNode>(<></>);
 
-        const [showCodeVerifier, setShowCodeVerifier] = useState(false);
+        const [emailSended, setEmailSended] = useState<React.ReactNode>(<></>);
+
+        const [showPopUp, setShowPopUp] = useState(false);
 
         const router = useRouter();
 
@@ -48,6 +51,11 @@ const RegisterFormShema = z.object({
 
             const jsonData =  JSON.stringify({email, password, confirmPassword});
 
+
+            
+            setTimeout(()=> {
+                setShowPopUp(false);
+            }, 3000);
         }
     
     
@@ -56,9 +64,21 @@ const RegisterFormShema = z.object({
     <>
      <nav className="flex flex-row gap-4 items-center pb-20 mt-5 ml-5 rounded-xl mr-5
      space-x-5 uppercase text-zinc-300 justify-center text-xl bg-zinc-900">
-               Goober<ShoppingCartIcon className="text-zinc-300"/>
+            
+            <span className=" flex items-center">
+                        <h1>Goober</h1>
+                        
+                        <ShoppingCartIcon className="text-zinc-300"/>
+            </span>
     </nav>
             
+        <p className="flex  items-center mt-10 justify-center max-w-sm mx-auto">
+
+            <CustomAlert type={CustomAlertType.SUCESS} title="Sucesso" 
+            msg="confirmação enviada no seu email" ></CustomAlert>
+
+        </p>
+
         <div className="flex items-center justify-center min-h-screen ">
             
             <div className="container flex flex-col gap-10 bg-zinc-700 max-w-prose rounded-xl p-10 border-zinc-900 border-solid border-4">

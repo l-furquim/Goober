@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ShoppingCartIcon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
@@ -40,9 +41,15 @@ import { z } from "zod"
         return(
 
             <>
-            <nav className="flex flex-row gap-4 items-center pb-20 mt-5 ml-5 rounded-xl mr-5
-            space-x-5 uppercase text-zinc-300 justify-center text-xl bg-zinc-900">
-                      Goober<ShoppingCartIcon className="text-zinc-300"/>
+            <nav className="flex-row flex justify-center container gap-4 p-10 mt-5 ml-5 rounded-xl mr-5
+            space-x-5 uppercase text-zinc-300 text-xl bg-zinc-900">
+                      
+                    <span className=" flex items-center">
+                        <h1>Goober</h1>
+                        
+                        <ShoppingCartIcon className="text-zinc-300"/>
+                    </span>
+           
            </nav>
                    
                <div className="flex items-center justify-center min-h-screen ">
@@ -66,8 +73,11 @@ import { z } from "zod"
                        </form>
                    </div>
                </div>
-           </>
 
+        <Link href={"/"}>
+            <footer className="text-right mr-10 mb-10 text-muted-foreground">Sobre nós</footer>
+        </Link>
+           </>
         )
 
     }
