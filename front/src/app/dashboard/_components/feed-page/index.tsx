@@ -8,7 +8,7 @@ const FeedPage = () => {
         'qweuwqhewqehwqiuh', '123qw22232', 'item 3'];
 
     return (
-        <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-400 w-full gap-10 h-fit">
+        <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-900 w-full gap-10 h-fit">
             {list.map((item, index) => (
                 <ul
                     key={index}
