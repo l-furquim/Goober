@@ -1,3 +1,4 @@
+import FeedPage from "./_components/feed-page";
 import { NavBar } from "./_components/nav-bar";
 
 const dashboardLayout = ({
@@ -9,7 +10,7 @@ const dashboardLayout = ({
     return (
 
         <div>
-            <NavBar/>
+            <FeedPage/>    
             {children}
 
         </div>

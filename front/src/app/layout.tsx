@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { NavBar } from "./dashboard/_components/nav-bar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={`${inter.className} bg-zinc-800`} >
         
-       
+        <NavBar/>
           {children}
        
 
