@@ -23,7 +23,7 @@ public class UserVerifier {
 
     private Instant expiresAt;
 
-
+    private String userImagePath;
 
     private AccountStatus status;
 
@@ -34,7 +34,9 @@ public class UserVerifier {
 
     }
 
-    public UserVerifier(UUID userVerifierid ,String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+    public UserVerifier(UUID userVerifierid ,String userVerifierName, String userVerifierEmail,
+                        String userVerifierPassword, Instant expiresAt, AccountStatus status, String code, String userImagePath) {
+
         this.userVerifierId = userVerifierid;
         this.userVerifierName = userVerifierName;
         this.userVerifierEmail = userVerifierEmail;
@@ -42,6 +44,7 @@ public class UserVerifier {
         this.expiresAt = expiresAt;
         this.status = status;
         this.code = code;
+        this.userImagePath = userImagePath;
     }
 
     public UUID getUserVerifierId() {
@@ -92,6 +95,14 @@ public class UserVerifier {
         this.code = code;
     }
 
+    public String getUserImagePath() {
+        return userImagePath;
+    }
+
+    public void setUserImagePath(String userImagePath) {
+        this.userImagePath = userImagePath;
+    }
+
     public static UserVerifier build(User user){
         return new UserVerifier(
                 user.getUserId(),
@@ -99,7 +110,8 @@ public class UserVerifier {
                 user.getUserPassword(),
                 Instant.now().plusMillis(900000),
                 user.getStatus(),
-                UUID.randomUUID().toString());
+                UUID.randomUUID().toString(),
+                user.getUserImage());
     }
 
     public String getUserVerifierName() {

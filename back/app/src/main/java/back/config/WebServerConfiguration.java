@@ -8,17 +8,16 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
-@ComponentScan("back")
 public class WebServerConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry){
 
         corsRegistry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*");
-
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
@@ -31,6 +30,8 @@ public class WebServerConfiguration implements WebMvcConfigurer {
     public RestTemplate restTemplate(){
         return new RestTemplate();
     }
+
+
 
 
 

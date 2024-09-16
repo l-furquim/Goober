@@ -10,6 +10,7 @@ const dashboardLayout = ({
     return (
 
         <div>
+            <NavBar/>
             <FeedPage/>    
             {children}
 

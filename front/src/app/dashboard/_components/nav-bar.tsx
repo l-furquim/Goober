@@ -1,7 +1,7 @@
-import { FilterBar } from "../filter-bar"
+import { FilterBar } from "./filter-bar"
 import Link from "next/link"
-import { SearchBar } from "../search-bar"
-import { UserData } from "../user-data"
+import { SearchBar } from "./search-bar"
+import { UserData } from "./user-data"
 import { ShoppingCartIcon } from "lucide-react"
 
 export const NavBar = () => {   

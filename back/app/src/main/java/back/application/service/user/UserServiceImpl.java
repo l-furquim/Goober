@@ -2,6 +2,7 @@ package back.application.service.user;
 
 import back.adapter.in.web.controller.user.dto.LoginUserRequestDto;
 import back.adapter.in.web.controller.user.dto.RegisterUserRequestDto;
+import back.adapter.in.web.controller.user.dto.ValidateTokenRequestDto;
 import back.adapter.in.web.controller.user.dto.VerifierCodeRequestDto;
 import back.application.service.auth.AuthServiceImpl;
 import back.application.service.email.EmailServiceImpl;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(RegisterUserRequestDto registerUserRequestDto, UserVerifierService userVerifierService) {
+    public void registerUser(RegisterUserRequestDto registerUserRequestDto, UserVerifierService userVerifierService, String path) {
         var aUser = userRepository.findUserByEmail(registerUserRequestDto.userEmail());
 
         if(aUser.isPresent()){
@@ -60,9 +61,11 @@ public class UserServiceImpl implements UserService {
 
 
         UserVerifier userVerifierJpaEntity = new UserVerifier(
-               UUID.randomUUID(), registerUserRequestDto.userName(),registerUserRequestDto.userEmail(), passwordEncoder.encode(
+               UUID.randomUUID(), registerUserRequestDto.userName(),
+                registerUserRequestDto.userEmail(), passwordEncoder.encode(
                 registerUserRequestDto.userPassword())
-                , Instant.now().plusMillis(6000000), AccountStatus.PENDING, UUID.randomUUID().toString());
+                , Instant.now().plusMillis(6000000),
+                AccountStatus.PENDING, UUID.randomUUID().toString(),path);
 
         try{
             userVerifierService.save(userVerifierJpaEntity);
@@ -106,7 +109,7 @@ public class UserServiceImpl implements UserService {
                 aUserVerifier.get().getUserVerifierEmail(), aUserVerifier.get().getUserVerifierPassword(),
                 "woiew", AccountStatus.ACTIVE);
 
-
+        User.setUserImage(aUserVerifier.get().getUserImagePath());
 
 
         try {
@@ -157,6 +160,21 @@ public class UserServiceImpl implements UserService {
 
         if(user.isEmpty()){
             throw new UserException("Não foi possivel carregar o usuario pelo seu email");
+        }
+        return user.get();
+    }
+
+    @Override
+    public Boolean validateToken(ValidateTokenRequestDto validateTokenRequestDto) {
+        return null;
+    }
+
+    @Override
+    public User getUserPropsById(String id) {
+        var user = userRepository.findById(id);
+
+        if(user.isEmpty()){
+            throw new UserException("Nao foi possivel encontrar o usuario");
         }
         return user.get();
     }

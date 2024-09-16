@@ -35,11 +35,16 @@ public class UserVerifierEntity {
     @Column(name = "code")
     private String code;
 
+    @Column(name = "userImagePath")
+    private String userImagePath;
+
     public UserVerifierEntity(){
 
     }
 
-    public UserVerifierEntity(UUID userVerifierId,String userVerifierName, String userVerifierEmail, String userVerifierPassword, Instant expiresAt, AccountStatus status, String code) {
+    public UserVerifierEntity(UUID userVerifierId,String userVerifierName, String userVerifierEmail, String userVerifierPassword
+            , Instant expiresAt, AccountStatus status, String code, String userImagePath) {
+
         this.userVerifierId = userVerifierId;
         this.userVerifierName = userVerifierName;
         this.userVerifierEmail = userVerifierEmail;
@@ -47,6 +52,7 @@ public class UserVerifierEntity {
         this.expiresAt = expiresAt;
         this.status = status;
         this.code = code;
+        this.userImagePath = userImagePath;
     }
 
     public UUID getUserVerifierEntityId() {
@@ -97,6 +103,14 @@ public class UserVerifierEntity {
         this.code = code;
     }
 
+    public String getUserImagePath() {
+        return userImagePath;
+    }
+
+    public void setUserImagePath(String userImagePath) {
+        this.userImagePath = userImagePath;
+    }
+
     public static UserVerifierEntity build(User user){
         return new UserVerifierEntity(
                 user.getUserId(),
@@ -105,7 +119,8 @@ public class UserVerifierEntity {
                 user.getUserPassword(),
                 Instant.now().plusMillis(900000),
                 user.getStatus(),
-                UUID.randomUUID().toString());
+                UUID.randomUUID().toString(),
+                user.getUserImage());
     }
 
     public String getUserVerifierName() {

@@ -1,32 +1,44 @@
 package back.adapter.in.web.controller.user;
 
 import back.adapter.in.web.controller.user.dto.*;
+import back.domain.port.in.AuthService;
+import back.domain.port.in.ImageService;
 import back.domain.port.in.UserService;
 import back.domain.port.in.UserVerifierService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
+    private final AuthService authService;
     private final UserService userService;
     private final UserVerifierService userVerifierService;
+    private final ImageService imageService;
 
     @Autowired
-    public UserController(UserService userService, UserVerifierService userVerifierService) {
+    public UserController(UserService userService, UserVerifierService userVerifierService,
+                          AuthService authService, ImageService imageService) {
         this.userService = userService;
         this.userVerifierService = userVerifierService;
+        this.authService = authService;
+        this.imageService = imageService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<RegisterUserResponseDto> registerUser(@RequestBody RegisterUserRequestDto registerUserRequestDto){
+    @PostMapping(value="/register" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RegisterUserResponseDto> registerUser(@RequestPart("registerData") RegisterUserRequestDto registerData,
+                                                                @RequestPart("userImage") MultipartFile userImage){
+        
+        var path = imageService.saveImage(userImage);
 
-        userService.registerUser(registerUserRequestDto, userVerifierService);
+        userService.registerUser(registerData, userVerifierService, path);
 
         return ResponseEntity.ok().body(new RegisterUserResponseDto("Registro realizado com sucesso"));
     }
@@ -35,8 +47,6 @@ public class UserController {
     public ResponseEntity<VerifierCodeResponseDto> verifierCode(@RequestBody VerifierCodeRequestDto codeRequestDto){
 
         var aUserVerifier = userService.verifierCode(codeRequestDto, userVerifierService);
-
-        log.info(aUserVerifier.getCode() + " " + aUserVerifier.getUserVerifierId());
 
         userVerifierService.delete(aUserVerifier);
 
@@ -55,6 +65,31 @@ public class UserController {
 
 
         return ResponseEntity.ok().body(new LoginUserResponseDto(token));
+    }
+
+    @PostMapping("/validateToken")
+    public ResponseEntity<ValidateTokenResponseDto> validateToken(@RequestBody ValidateTokenRequestDto validateTokenRequestDto){
+
+        var isValid = authService.validateTokenNoString(validateTokenRequestDto.token());
+
+
+        return ResponseEntity.ok().body(new ValidateTokenResponseDto(isValid));
+    }
+
+    @PostMapping("/image/save")
+    public ResponseEntity<String> uploadImage(@RequestBody MultipartFile multipartFile){
+
+        var path = imageService.saveImage(multipartFile);
+
+        return ResponseEntity.ok().body(path);
+    }
+
+    @GetMapping("/profile/show/{id}")
+    public ResponseEntity<ShowUserPropsResponseDto> showUserProps(@PathVariable("id") String id){
+
+        var user = userService.getUserPropsById(id);
+
+        return ResponseEntity.ok().body(new ShowUserPropsResponseDto(user.getUserEmail(), user.getUserName(), user.getUserImage()));
     }
 
 

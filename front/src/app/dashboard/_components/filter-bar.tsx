@@ -26,7 +26,7 @@ export const FilterBar = () => {
         {isHoveredCategories && (
                 
             <nav onMouseEnter={() => setIsHoveredCategories(true)} onMouseLeave={() =>  setIsHoveredCategories(false)} 
-            className="mt-auto flex-row flex ml-72 bg-zinc-600 w-fit rounded-b-xl text-center gap-1 z-10" >
+            className="absolute left-12 ml-60 mr-72 bg-zinc-600 w-fit rounded-b-xl text-center gap-1 z-10" >
                <ul className="p-2"> 
                         <li className="py-1 px-3 hover:bg-zinc-400">Gamer</li>
                         <li className="py-1 px-3 hover:bg-zinc-400">Bem estar</li>
@@ -37,7 +37,7 @@ export const FilterBar = () => {
         {isHoveredPrice && (
 
             <nav onMouseEnter={() => setIsHoveredCategories(true)} onMouseLeave={() =>  setIsHoveredCategories(false)} 
-            className="absolute right-0 mr-72 bg-zinc-600 w-fit rounded-b-xl text-center gap-1 z-10" >
+            className=" absolute right-0 mr-72 bg-zinc-600 w-fit rounded-b-xl text-center gap-1 z-10" >
             <ul className="p-2"> 
                     <li className="py-1 px-3 hover:bg-zinc-400">R$ 100,00</li>
                     <li className="py-1 px-3 hover:bg-zinc-400">R$ 200,00</li>

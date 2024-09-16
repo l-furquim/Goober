@@ -1,4 +1,11 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/goober
   datasource:
     url: jdbc:postgresql://localhost:5432/goober
     username: postgres
@@ -16,6 +23,7 @@ spring:
           starttls:
             enable: true
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
     properties:

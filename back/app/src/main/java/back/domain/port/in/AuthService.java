@@ -8,4 +8,5 @@ public interface AuthService {
     String validateToken(String token);
     String createToken(final User user);
     UserDetails loadUserByUsername(String userName);
+    Boolean validateTokenNoString(String token);
 }

@@ -1,11 +1,16 @@
 'use client'
 
+import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AuthContext } from "@/context/auth-context";
+import { backEndApi } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 
@@ -21,6 +26,9 @@ import { z } from "zod"
 
         const [message, setMessage] = useState<React.ReactNode>(<></>);
 
+        const router = useRouter();
+
+        const context = useContext(AuthContext);
 
         const {handleSubmit, register, setValue} = useForm<loginFormType>({
             resolver: zodResolver(LoginFormSchema),   
@@ -33,6 +41,30 @@ import { z } from "zod"
         const handleLoginSubmit = async(data: loginFormType) =>{
 
             const {email, password} = data;
+
+            try{
+
+                const response = await backEndApi.post("user/login", JSON.stringify({email,password}));
+
+                if(response.data){
+
+                    const {token} = response.data;
+                    
+                    context.signIn(token);
+                    
+                    setMessage( <CustomAlert type={CustomAlertType.SUCESS} title="Sucesso" 
+                        msg="confirmação enviada no seu email" ></CustomAlert>)
+                    
+                    setTimeout(()=> router.push("/dashboard/home"), 1500);
+                }
+
+
+            }catch(e){
+                const axiosError = e as AxiosError;
+
+                <CustomAlert type={CustomAlertType.ERROR} title="Erro" 
+                msg={axiosError.message} ></CustomAlert>
+            }
 
 
         }

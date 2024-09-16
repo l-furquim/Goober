@@ -17,7 +17,8 @@ public class UserVerifierMapper {
                 userVerifier.getUserVerifierPassword(),
                 userVerifier.getExpiresAt(),
                 userVerifier.getStatus(),
-                userVerifier.getCode()
+                userVerifier.getCode(),
+                userVerifier.getUserImagePath()
         ));
     }
 
@@ -29,7 +30,8 @@ public class UserVerifierMapper {
                 userVerifier.getUserVerifierEntityPassword(),
                 userVerifier.getExpiresAt(),
                 userVerifier.getStatus(),
-                userVerifier.getCode()
+                userVerifier.getCode(),
+                userVerifier.getUserImagePath()
         ));
     }
 

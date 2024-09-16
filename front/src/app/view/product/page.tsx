@@ -16,7 +16,7 @@ export default  function ProductContainer ({params}: {params: {product: string};
     const category = searchParams.get('category');
     const price = searchParams.get("price");
 
-    const imagesUrl = ['foto morangao.png', 'mouseGamer.webp'];
+    const imagesUrl = ['foto morangao.png', 'mouseGamer.webp', 'fotocachorrao.jpg'];
 
     const [imageSelected, setImageSelected] = useState(imagesUrl.at(0));
 

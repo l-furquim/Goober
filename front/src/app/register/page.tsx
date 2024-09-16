@@ -9,16 +9,22 @@ import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod"
 import {ShoppingCartIcon } from "lucide-react";
 import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
+import { backEndApi, frontEndApi } from "@/lib/api";
+import { AxiosError } from "axios";
 
-
+export type RegisterUserRequestType = {
+    userName: string
+    userEmail: string,
+    userPassword: string
+}
 
 
 const RegisterFormShema = z.object({
-        email: z.string().email({message: "Email invalido"}),
-        password: z.string().min(1, "Senha invalida"),
-        confirmPassword: z.string(),
-        iconImage: z.unknown()
-    }).refine(data => data.password === data.confirmPassword, {
+        userName: z.string().min(1, "Nome invalido"),    
+        userEmail: z.string().email({message: "Email invalido"}),
+        userPassword: z.string().min(1, "Senha invalida"),
+        confirmPassword: z.string()
+    }).refine(data => data.userPassword === data.confirmPassword, {
         path: ['confirmPassword'],
         message: "As senhas não são iguais"
     });
@@ -29,33 +35,68 @@ const RegisterFormShema = z.object({
 
         const [message, setMessage] = useState<React.ReactNode>(<></>);
 
-        const [emailSended, setEmailSended] = useState<React.ReactNode>(<></>);
-
-        const [showPopUp, setShowPopUp] = useState(false);
-
-        const router = useRouter();
+        const [userImage, setUserImage] = useState<File | null>(null);
 
         const {handleSubmit, register,setValue} = useForm<RegisterFormType>({
             resolver: zodResolver(RegisterFormShema),
             defaultValues: {
-                email: "",
-                password: "",
-                confirmPassword: "",
-                iconImage: null,
+                userName: "",
+                userEmail: "",
+                userPassword: "",
+                confirmPassword: ""
             }
         });
 
+        const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.files && e.target.files.length > 0) {
+                setUserImage(e.target.files[0]);
+                console.log("Imagem selecionada:", e.target.files[0]);  // Verificação adicional
+            }
+        };
+        
+          
+
+
+         
         const handleRegisterSubmit = async(data: RegisterFormType) => {
 
-            const {email, password, confirmPassword} = data;
+            const {userEmail, userName, userPassword} = data;
 
-            const jsonData =  JSON.stringify({email, password, confirmPassword});
+            const form = new FormData();
+
+            const registerData: RegisterUserRequestType = {
+                userEmail: userEmail,
+                userName: userName,
+                userPassword: userPassword
+            };
+
+            form.append("registerData", new Blob([JSON.stringify(registerData)], { type: 'application/json' }));
+
+            if (userImage) {
+                form.append("userImage", userImage);
+            }
+        
+            form.forEach((value, key)=> (
+                console.log(value, key)
+            ));
 
 
-            
-            setTimeout(()=> {
-                setShowPopUp(false);
-            }, 3000);
+            try{
+                const response = await fetch('http://localhost:8080/user/register', {
+                    method: 'POST',
+                    body: form, 
+                  });
+
+                if(response){
+                    setMessage( <CustomAlert type={CustomAlertType.SUCESS} title="Sucesso" 
+                        msg="confirmação enviada no seu email" ></CustomAlert>)
+                }
+            }catch(e){
+                const error = e as AxiosError;
+
+                <CustomAlert type={CustomAlertType.ERROR} title="Erro" 
+                msg={error.message} ></CustomAlert>
+            }
         }
     
     
@@ -71,13 +112,6 @@ const RegisterFormShema = z.object({
                         <ShoppingCartIcon className="text-zinc-300"/>
             </span>
     </nav>
-            
-        <p className="flex  items-center mt-10 justify-center max-w-sm mx-auto">
-
-            <CustomAlert type={CustomAlertType.SUCESS} title="Sucesso" 
-            msg="confirmação enviada no seu email" ></CustomAlert>
-
-        </p>
 
         <div className="flex items-center justify-center min-h-screen ">
             
@@ -88,19 +122,22 @@ const RegisterFormShema = z.object({
                 {message}
 
 
-                <form className="space-y-2" onSubmit={handleSubmit(handleRegisterSubmit)}>
+                <form className="space-y-2" onSubmit={handleSubmit(handleRegisterSubmit)} encType="multipart/form-data">
                     
+                    <label className="block text-zinc-300">Nome completo: </label>
+                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("userName")} type="text"/>
                     <label className="block text-zinc-300">Email: </label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("email")} type="text"/>
+                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("userEmail")} type="text"/>
 
                     <label className="block text-zinc-300">Senha: </label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("password")} type="text"/>
+                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("userPassword")} type="text"/>
                     
                     <label className="block text-zinc-300">Confirme sua senha: </label>
                         <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("confirmPassword")} type="text"></Input>
 
                     <label className="block text-zinc-300">Sua foto de perfil:</label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("iconImage")} type="file"></Input>
+                        <Input className="border-zinc-900 border-2 bg-zinc-600"
+                        accept="image/*" type="file" onChange={handleFileChange}></Input>
 
 
                     <Button type="submit">Enviar</Button>

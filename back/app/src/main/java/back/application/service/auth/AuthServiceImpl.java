@@ -28,14 +28,34 @@ public class AuthServiceImpl implements UserDetailsService , AuthService {
         this.userRepository = userRepository;
     }
 
-    @Value("${myapp.secret.token}")
-    private String TOKEN_SECRET;
+
+    private String TOKEN_SECRET = "alfabeto";
 
     private String TOKEN_ISSUER = "goober";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return UserMapper.toEntity(userRepository.findUserByEmail(username).get()).get();
+    }
+
+    @Override
+    public Boolean validateTokenNoString(String token) {
+        var isValid = false;
+
+        try{
+            final var anAlgorithm = Algorithm.HMAC256("alfabeto");
+
+            final var aVerifier = JWT.require(anAlgorithm)
+                    .withIssuer(TOKEN_ISSUER).build();
+
+            final var decodedToken = aVerifier.verify(token);
+
+           isValid = true;
+
+            return isValid;
+        }catch (Exception e){
+            throw new AuthException("Token invalido "+ token + e.getMessage());
+        }
     }
 
 
@@ -76,6 +96,8 @@ public class AuthServiceImpl implements UserDetailsService , AuthService {
             throw new AuthException("Token invalido "+ token + e.getMessage());
         }
     }
+
+
 
 
 }
