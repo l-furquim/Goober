@@ -9,13 +9,16 @@ import back.domain.exception.AnnouncementException;
 import back.domain.exception.UserException;
 import back.domain.model.announcement.Announcement;
 import back.domain.model.product.Product;
+import back.domain.model.user.User;
 import back.domain.port.in.AnnouncementService;
 import back.domain.port.out.AnnouncementRepository;
+import back.domain.port.out.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.text.Normalizer;
@@ -26,31 +29,44 @@ import java.util.stream.Collectors;
 public class AnnouncementServiceImpl implements AnnouncementService {
     private static final Logger log = LoggerFactory.getLogger(AnnouncementServiceImpl.class);
     private final AnnouncementRepository announcementRepository;
+    private final ProductRepository productRepository;
 
-    public AnnouncementServiceImpl(AnnouncementRepository announcementRepository) {
+    public AnnouncementServiceImpl(AnnouncementRepository announcementRepository, ProductRepository productRepository) {
         this.announcementRepository = announcementRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
-    public Announcement createAnnouncement(CreateAnnouncementRequestDto createAnnouncementRequestDto) {
-        if(createAnnouncementRequestDto.name().isBlank()){
+    public Announcement createAnnouncement(CreateAnnouncementRequestDto createAnnouncementRequestDto,
+                                           User announcer, String imagesPath) {
+        if(createAnnouncementRequestDto.announcementName().isBlank()){
             throw new AnnouncementException("Nao e possivel criar um anuncio sem nome !");
         }
 
+        var product = new Product(
+                UUID.randomUUID(),
+                createAnnouncementRequestDto.announcementName(),
+                BigDecimal.valueOf(createAnnouncementRequestDto.announcementPrice()),
+                ProductCategories.valueOf(createAnnouncementRequestDto.announcementCategorie()),
+                createAnnouncementRequestDto.announcementDescription(),
+                imagesPath
+        );
 
         var announcement = new Announcement(
                 UUID.randomUUID(),
-               BigDecimal.valueOf(createAnnouncementRequestDto.price()),
-                createAnnouncementRequestDto.name(),
+               BigDecimal.valueOf(createAnnouncementRequestDto.announcementPrice()),
+                createAnnouncementRequestDto.announcementName(),
                 0,
                 0,
-                createAnnouncementRequestDto.announcerId(),
-                createAnnouncementRequestDto.imagesPath(),
-                createAnnouncementRequestDto.products()
+                announcer.getUserId().toString(),
+                imagesPath
         );
+        announcement.addProducts(product);
+
 
         try{
             announcementRepository.save(announcement);
+            productRepository.save(product);
         }catch (IllegalArgumentException e){
             throw new UserException(e.getMessage());
         }catch(OptimisticLockingFailureException e) {

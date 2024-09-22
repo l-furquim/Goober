@@ -52,10 +52,7 @@ import { z } from "zod"
                     
                     context.signIn(token);
                     
-                    setMessage( <CustomAlert type={CustomAlertType.SUCESS} title="Sucesso" 
-                        msg="confirmação enviada no seu email" ></CustomAlert>)
-                    
-                    setTimeout(()=> router.push("/dashboard/home"), 1500);
+                    setTimeout(()=> router.push("/dashboard/home"), 500);
                 }
 
 

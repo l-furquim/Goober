@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final GridFsTemplate template;
 
-    private static String UPLOAD_DIR = "src/main/resources/static/images/user/";
+    private static String UPLOAD_DIR = "src/main/resources/static/images/";
 
 
     public ImageServiceImpl(ImageRepository imageRepository, GridFsTemplate template) {
@@ -31,7 +32,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String saveImage(MultipartFile file) {
+    public String saveImage(MultipartFile file, String rootPath) {
         try {
             Image image = new Image(
                     UUID.randomUUID().toString(),
@@ -42,7 +43,7 @@ public class ImageServiceImpl implements ImageService {
 
             imageRepository.save(image);
 
-            Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
+            Path path = Paths.get(UPLOAD_DIR + rootPath + file.getOriginalFilename());
 
             Files.write(path , file.getBytes());
             return UPLOAD_DIR + file.getOriginalFilename();
@@ -63,5 +64,26 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void deleteImage(String imageId) {
         imageRepository.delete(imageId);
+    }
+
+    @Override
+    public String saveMultipleImages(List<MultipartFile> images, String rootPath) {
+            images.forEach(image-> {
+                try {
+                    var aImage = new Image(
+                            UUID.randomUUID().toString(),
+                            image.getOriginalFilename(),
+                            image.getOriginalFilename(),
+                            image.getBytes()
+                    );
+                    imageRepository.save(aImage);
+                    Path path = Paths.get(UPLOAD_DIR + rootPath + image.getOriginalFilename());
+
+                    Files.write(path , image.getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        return UPLOAD_DIR + rootPath;
     }
 }

@@ -9,4 +9,5 @@ public interface AuthService {
     String createToken(final User user);
     UserDetails loadUserByUsername(String userName);
     Boolean validateTokenNoString(String token);
+    User getUserByToken(String token);
 }

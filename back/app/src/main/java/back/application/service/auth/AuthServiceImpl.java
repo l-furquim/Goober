@@ -58,6 +58,13 @@ public class AuthServiceImpl implements UserDetailsService , AuthService {
         }
     }
 
+    @Override
+    public User getUserByToken(String token) {
+        var subject = this.validateToken(token);
+
+        return userRepository.findUserByEmail(subject).get();
+    }
+
 
     @Override
     public String createToken(final User userDomain) {

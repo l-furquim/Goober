@@ -19,7 +19,6 @@ public class Announcement {
 
     private String announcementName;
 
-
     private BigDecimal announcementPrice;
 
 
@@ -42,7 +41,11 @@ public class Announcement {
 
     }
 
-    public Announcement(UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products) {
+    public UUID getAnnouncementId() {
+        return announcementId;
+    }
+
+    public Announcement(UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages) {
         this.announcementId = announcementId;
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
@@ -50,11 +53,6 @@ public class Announcement {
         this.announcementQuestions = announcementQuestions;
         this.announcerId = announcerId;
         this.productImages = productImages;
-        this.products = products;
-    }
-
-    public UUID getAnnouncementId() {
-        return announcementId;
     }
 
     public void setAnnouncementId(UUID announcementId) {
@@ -108,9 +106,6 @@ public class Announcement {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 
     public void addProducts(Product product){
         this.products.add(product);

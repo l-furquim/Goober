@@ -6,11 +6,17 @@ import back.adapter.in.web.controller.announcement.dto.CreateAnnouncementRespons
 import back.adapter.in.web.controller.announcement.dto.FindAllAnnouncementsResponseDto;
 import back.adapter.in.web.controller.announcement.dto.FindAnnouncementIfContainsResponseDto;
 import back.domain.port.in.AnnouncementService;
+import back.domain.port.in.AuthService;
+import back.domain.port.in.ImageService;
+import back.domain.port.in.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/announcement")
@@ -18,18 +24,26 @@ public class AnnouncementController {
 
     private static final Logger log = LoggerFactory.getLogger(AnnouncementController.class);
     private final AnnouncementService announcementService;
-
+    private final AuthService authService;
+    private final ImageService imageService;
 
     @Autowired
-    public AnnouncementController(AnnouncementService announcementService) {
+    public AnnouncementController(AnnouncementService announcementService, AuthService authService, ImageService imageService) {
         this.announcementService = announcementService;
+        this.authService = authService;
+        this.imageService = imageService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreateAnnouncementResponseDto> createAnnouncement(@RequestBody CreateAnnouncementRequestDto createAnnouncementRequestDto){
+    public ResponseEntity<CreateAnnouncementResponseDto> createAnnouncement(@RequestPart CreateAnnouncementRequestDto announcementJson,
+                                                                            @RequestHeader("Authorization") String token,
+                                                                            @RequestPart List<MultipartFile> announcementImages){
 
 
-        announcementService.createAnnouncement(createAnnouncementRequestDto);
+        var announcerId = authService.getUserByToken(token.substring(7));
+        var imagesPath = imageService.saveMultipleImages(announcementImages, "announcement/" + announcementJson.announcementName());
+
+        announcementService.createAnnouncement(announcementJson ,announcerId , imagesPath);
 
 
         return ResponseEntity.ok().body(new CreateAnnouncementResponseDto("Anuncio criado com sucesso"));

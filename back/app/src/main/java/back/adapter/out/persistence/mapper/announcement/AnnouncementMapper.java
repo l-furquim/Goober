@@ -36,8 +36,7 @@ public class AnnouncementMapper {
                 announcement.getAnnouncementEntityLikes(),
                 announcement.getAnnouncementEntityQuestions(),
                 announcement.getAnnouncerId(),
-                announcement.getProductImages(),
-                ProductMapper.productEntityToDomainList(announcement.getProducts())
+                announcement.getProductImages()
         ));
     }
 

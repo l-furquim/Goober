@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<RegisterUserResponseDto> registerUser(@RequestPart("registerData") RegisterUserRequestDto registerData,
                                                                 @RequestPart("userImage") MultipartFile userImage){
         
-        var path = imageService.saveImage(userImage);
+        var path = imageService.saveImage(userImage, "user/" + registerData.userEmail());
 
         userService.registerUser(registerData, userVerifierService, path);
 
@@ -74,14 +74,6 @@ public class UserController {
 
 
         return ResponseEntity.ok().body(new ValidateTokenResponseDto(isValid));
-    }
-
-    @PostMapping("/image/save")
-    public ResponseEntity<String> uploadImage(@RequestBody MultipartFile multipartFile){
-
-        var path = imageService.saveImage(multipartFile);
-
-        return ResponseEntity.ok().body(path);
     }
 
     @GetMapping("/profile/show/{id}")
