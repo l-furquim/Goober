@@ -54,14 +54,14 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         var announcement = new Announcement(
                 UUID.randomUUID(),
-               BigDecimal.valueOf(createAnnouncementRequestDto.announcementPrice()),
+                BigDecimal.valueOf(createAnnouncementRequestDto.announcementPrice()),
                 createAnnouncementRequestDto.announcementName(),
                 0,
                 0,
                 announcer.getUserId().toString(),
-                imagesPath
+                imagesPath,
+                new ArrayList<Product>()
         );
-        announcement.addProducts(product);
 
 
         try{

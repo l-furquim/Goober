@@ -45,12 +45,13 @@ public class Announcement {
         return announcementId;
     }
 
-    public Announcement(UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages) {
+    public Announcement(UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products) {
         this.announcementId = announcementId;
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
         this.announcementName = announcementName;
         this.announcementQuestions = announcementQuestions;
+        this.products = products;
         this.announcerId = announcerId;
         this.productImages = productImages;
     }

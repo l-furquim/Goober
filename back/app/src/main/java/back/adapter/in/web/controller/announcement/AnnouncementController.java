@@ -41,7 +41,7 @@ public class AnnouncementController {
 
 
         var announcerId = authService.getUserByToken(token.substring(7));
-        var imagesPath = imageService.saveMultipleImages(announcementImages, "announcement/" + announcementJson.announcementName());
+        var imagesPath = imageService.saveMultipleImages(announcementImages, "announcement/" + announcementJson.announcementName() + "/");
 
         announcementService.createAnnouncement(announcementJson ,announcerId , imagesPath);
 

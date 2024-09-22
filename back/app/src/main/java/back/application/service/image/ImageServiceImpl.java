@@ -4,8 +4,6 @@ import back.domain.exception.ImageException;
 import back.domain.model.image.Image;
 import back.domain.port.in.ImageService;
 import back.domain.port.out.ImageRepository;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +43,10 @@ public class ImageServiceImpl implements ImageService {
 
             Path path = Paths.get(UPLOAD_DIR + rootPath + file.getOriginalFilename());
 
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+
             Files.write(path , file.getBytes());
             return UPLOAD_DIR + file.getOriginalFilename();
 
@@ -77,9 +79,15 @@ public class ImageServiceImpl implements ImageService {
                             image.getBytes()
                     );
                     imageRepository.save(aImage);
-                    Path path = Paths.get(UPLOAD_DIR + rootPath + image.getOriginalFilename());
 
-                    Files.write(path , image.getBytes());
+                    Path pathTo = Paths.get(UPLOAD_DIR + rootPath + image.getOriginalFilename());
+
+                    Path path = Paths.get(UPLOAD_DIR + rootPath);
+
+                    if (!Files.exists(path)) {
+                        Files.createDirectories(path);
+                    }
+                    Files.write(pathTo , image.getBytes());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -11,11 +11,21 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+
 
 export type NewAnnouncementRequestType = {
     announcementName: String,
     annoncementDescription: String,
-    announcementPrice: Number
+    announcementPrice: Number,
+    announcementCategorie: String,
+    announcerToken: String
 };
 
 
@@ -27,7 +37,8 @@ const NewAnnouncementPage = ({params,} : {
     const NewAnnouncementFormSchema = z.object({
         announcementName: z.string().min(3,"Nome inválido"),
         announcementDescription: z.string().min(5, "Descrição inválida"),
-        announcementPrice: z.number()
+        announcementPrice: z.string(),
+        announcementCategorie: z.string()
     });
     
 
@@ -40,12 +51,13 @@ const NewAnnouncementPage = ({params,} : {
     const router = useRouter();
 
 
-    const {handleSubmit, register} = useForm<NewAnnouncementFormType>({
+    const {handleSubmit, register, setValue} = useForm<NewAnnouncementFormType>({
         resolver: zodResolver(NewAnnouncementFormSchema),
         defaultValues: {
             announcementName: "",
             announcementDescription: "",
-            announcementPrice: 0
+            announcementPrice: "",
+            announcementCategorie : "",
         },
     });
 
@@ -58,14 +70,16 @@ const NewAnnouncementPage = ({params,} : {
 
     const handleNewAnnouncementSubmit = async(data: NewAnnouncementFormType) =>{
 
-        const {announcementName, announcementDescription , announcementPrice} = data;
+        const {announcementName, announcementDescription , announcementPrice, announcementCategorie} = data;
 
         const form = new FormData();        
 
         const announcementJson: NewAnnouncementRequestType = {
             announcementName: announcementName,
             annoncementDescription: announcementDescription,
-            announcementPrice: announcementPrice
+            announcementPrice: parseFloat(announcementPrice),
+            announcementCategorie: announcementCategorie.toString(),
+            announcerToken: userCookies,
         };
 
         form.append("announcementJson", new Blob([JSON.stringify(announcementJson)], { type: 'application/json' }))
@@ -75,18 +89,25 @@ const NewAnnouncementPage = ({params,} : {
         }
 
         form.forEach((item => console.log(item)));
+        console.log(announcementCategorie);
         
         try{    
 
-            const response = await backEndApi.post("announcement/create", form);
+            const response = await fetch('http://localhost:8080/announcement/create', {
+                method: 'POST',
+                body: form, 
+                headers: {
+                    'Authorization': `Bearer ${userCookies}`
+                }
+              });
 
-            if(response.data){
+            if(response.ok){
                 setMessage(<CustomAlert title="Sucesso" msg="anúncio realizado com sucesso !" 
                                         type={CustomAlertType.SUCESS}/>)
-                setTimeout(()=> router.push("/dashboard/user/profile"));           
-            }
-        
+                setTimeout(()=> router.push("/dashboard/user/profile"), 2000);           
+            };
 
+        
         }catch(e){
 
 
@@ -128,10 +149,31 @@ const NewAnnouncementPage = ({params,} : {
                                 
                                     <p className="flex flex-row gap-2">  
                                      <Input {...register("announcementPrice")} className="bg-slate-800  border-slate-900 focus-visible:ring-transparent"
-                                            placeholder="R$400.69" />
+                                          placeholder="R$400.69" />
                                     </p>
-
                             </div>
+
+                            <div>
+                                <p>Categoria do produto:</p>
+
+                                <Select onValueChange={(value) => setValue("announcementCategorie", value)}>
+                                    <SelectTrigger className="bg-slate-800 border-slate-900" id="categorie">
+                                        <SelectValue placeholder="Escolher" />
+                                    </SelectTrigger>
+                                    <SelectContent position="popper" className="bg-slate-900  text-zinc-300 border-slate-900 ">
+                                        <SelectItem value="GAMER">Gamer</SelectItem>
+                                        <SelectItem value="CASA">Casa</SelectItem>
+                                        <SelectItem value="ROUPAS E ACESSORIOS">Roupas e Acessórios</SelectItem>
+                                        <SelectItem value="ELETRONICOS">Eletrônico</SelectItem>
+                                        <SelectItem value="SAUDE E BELEZA">Saúde e Beleza</SelectItem>
+                                        <SelectItem value="INFANTIL">Infantil</SelectItem>
+                                        <SelectItem value="ESPORTE">Esporte</SelectItem>
+                                        <SelectItem value="COMIDA">Comida</SelectItem>
+                                        <SelectItem value="UTEIS">Úteis</SelectItem>  {/* Agora dentro do SelectContent */}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
                             
                             <div className="space-y-3">
                                 <p>Imagens do produto: </p>
@@ -142,7 +184,7 @@ const NewAnnouncementPage = ({params,} : {
                             
                             <div>
                                 <p className="justify-center items-center flex">
-                                    <Button className="bg-slate-800 gap-3 hover:bg-zinc-700"type="submit">
+                                    <Button className="bg-slate-800 gap-3 hover:bg-zinc-700" type="submit">
                                             Anunciar 
                                             <RocketIcon size={"15px"}/>
                                     </Button>
