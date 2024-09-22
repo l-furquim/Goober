@@ -29,12 +29,12 @@ export const SearchBar = () => {
 
 
     return (
-        <form className="relative w-[400px] flex items-center" onSubmit={onSubmit}>
+        <form className="relative w-[400px] flex items-center gap-5" onSubmit={onSubmit}>
 
-            <Input className="bg-slate-800 border-0 focus-visible:ring-transparent" placeholder="Buscar" value={value}
+            <Input className="bg-zinc-950 border border-zinc-400 border-muted-foreground focus-visible:ring-transparent" placeholder="Buscar" value={value}
             onChange={(e) => setValue(e.target.value)}/>
 
-            <Button className="bg-zinc-900 hover:opacity-75 transition " variant={"secondary"} type="submit">
+            <Button className="bg-zinc-300 text-black hover:opacity-75 transition " variant={"secondary"} type="submit">
                 <SearchIcon className="text-muted-foreground h-5 w-5"/>
             </Button>
 

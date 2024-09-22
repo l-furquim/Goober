@@ -27,9 +27,11 @@ export const UserData = () => {
 
     return (
 
-    <>
-      Lucas<UserCircleIcon/> 
-    </>
+    
+    <div className="flex flex-row gap-2 hover:opacity-75 transition">
+      Lucas<UserCircleIcon className="mt-[0.5px]"/> 
+    </div>
+    
     )
 
 }

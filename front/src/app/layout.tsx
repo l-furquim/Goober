@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
   <AuthContextProvider>
     <html lang="pt-br">
-      <body className={`${inter.className} bg-zinc-800`} >
+      <body className={`${inter.className} bg-zinc-950`} >
           {children}
       </body>
     </html>

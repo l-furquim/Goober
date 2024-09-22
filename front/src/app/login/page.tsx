@@ -71,7 +71,7 @@ import { z } from "zod"
 
             <>
             <nav className="flex-row flex justify-center container gap-4 p-10 mt-5 ml-5 rounded-xl mr-5
-            space-x-5 uppercase text-zinc-300 text-xl bg-zinc-900">
+            space-x-5 uppercase text-zinc-300 text-xl border-muted-foreground border-zinc-300 border-[0.5px] bg-zinc-950">
                       
                     <span className=" flex items-center">
                         <h1>Goober</h1>
@@ -83,21 +83,21 @@ import { z } from "zod"
                    
                <div className="flex items-center justify-center min-h-screen ">
                    
-                   <div className="container flex flex-col gap-10 bg-zinc-700 max-w-prose rounded-xl p-10 border-zinc-900 border-solid border-4">
+                   <div className="container flex flex-col gap-10 bg-zinc-950 max-w-prose rounded-xl p-10 border-zinc-300 border-muted-foreground border-[1px]">
 
-                   <h2 className="font-bold text-xl">Insira seus dados de login:</h2>
+                   <h2 className="font-bold text-xl text-zinc-300">Insira seus dados de login:</h2>
 
                         {message}
        
                        <form className="space-y-2" onSubmit={handleSubmit(handleLoginSubmit)}>
                            
                            <label className="block text-zinc-300">Email: </label>
-                               <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("email")} type="text"/>
+                               <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("email")} type="text"/>
        
                            <label className="block text-zinc-300">Senha: </label>
-                               <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("password")} type="text"/>
+                               <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("password")} type="text"/>
        
-                           <Button type="submit">Enviar</Button>
+                           <Button className="bg-zinc-300 text-black hover:bg-zinc-400" type="submit">Enviar</Button>
        
                        </form>
                    </div>

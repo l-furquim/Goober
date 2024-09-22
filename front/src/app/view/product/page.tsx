@@ -1,5 +1,6 @@
 'use client'
 
+import { NavBar } from "@/app/dashboard/_components/nav-bar";
 import { Button } from "@/components/ui/button";
 import { HandshakeIcon, HeartIcon, MapPin, ShoppingCartIcon, Tags } from "lucide-react";
 import Image from "next/image";
@@ -36,8 +37,10 @@ export default  function ProductContainer ({params}: {params: {product: string};
     }
 
     return (
+    <>
+    <NavBar/>
         <div className="container bg-zinc-900 ml-11 mt-10 h-[2000px] items-center justify-center">
-
+    
             <div className="bg-zinc-600 flex-col flex abolute items-center justify-start 
             absolute right-14 ml-8 mt-10 h-[450px] rounded-xl max-w-full w-2/5 gap-10 ">
                 
@@ -120,6 +123,7 @@ export default  function ProductContainer ({params}: {params: {product: string};
                 ))}
 
         </div>
+        </>
     );
 
 };

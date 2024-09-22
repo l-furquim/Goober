@@ -8,14 +8,16 @@ const FeedPage = () => {
         'qweuwqhewqehwqiuh', '123qw22232', 'item 3'];
 
     return (
-        <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-900 w-full gap-10 h-fit">
+        <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-950  w-full gap-10 h-fit">
             {list.map((item, index) => (
                 <ul
                     key={index}
-                    className="flex h-72 w-1/4 mt-20  max-w-[calc(100%/3-10px)] rounded-xl bg-zinc-600 list-none"
+                    className="flex h-72 w-1/4 mt-20  max-w-[calc(100%/3-10px)] 
+                    rounded-xl bg-zinc-900 border border-gray-950 border-muted-foreground list-none
+                    hover:border-gray-500 transition duration-400"
                 >
                 <Link href={`/view/product?name=${item}&price=120&category=gamer`}>
-                    <li className="p-4">
+                    <li className="p-4 text-zinc-300">
                         {item} 
                         <Image 
                         width={"600"} height={"300"} src={"/images/foto morangao.png"} alt="Mouse gamer" 

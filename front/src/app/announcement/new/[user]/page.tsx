@@ -123,7 +123,8 @@ const NewAnnouncementPage = ({params,} : {
     <>
     <NavBar/>
         <div className="container flex items-center justify-center">
-            <div className="flex-col mt-10 text-zinc-300 container p-16 rounded-xl justify-center w-[600px] h-[700px] bg-zinc-900">
+            <div className="flex-col mt-10 text-zinc-300 container p-16 rounded-xl justify-center 
+            w-[600px] h-[700px] bg-zinc-950 border border-muted-foreground border-zinc-300 ">
                     
                     {message}
 
@@ -133,14 +134,14 @@ const NewAnnouncementPage = ({params,} : {
                                 
                                 <div className="space-y-3">
                                     <p>Nome do produto: </p>
-                                        <Input {...register("announcementName")} className="bg-slate-800 border-slate-900 focus-visible:ring-transparent"
+                                        <Input {...register("announcementName")} className="bg-zinc-900  border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
                                         placeholder="Diga algo que chame atenção.."/>
                                 </div>
 
                                 <div className="space-y-3">
                                     <p>Descrição do produto: </p>
-                                        <Input {...register("announcementDescription")} className="bg-slate-800 
-                                        border-slate-900 focus-visible:ring-transparent"
+                                        <Input {...register("announcementDescription")} className="bg-zinc-900 
+                                        border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
                                             placeholder="Mouse bluetooth 5.0 ultra led HD"/>
                                 </div>
 
@@ -148,7 +149,7 @@ const NewAnnouncementPage = ({params,} : {
                                 <p>Preço do produto: </p>
                                 
                                     <p className="flex flex-row gap-2">  
-                                     <Input {...register("announcementPrice")} className="bg-slate-800  border-slate-900 focus-visible:ring-transparent"
+                                     <Input {...register("announcementPrice")} className="bg-zinc-900  border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
                                           placeholder="R$400.69" />
                                     </p>
                             </div>
@@ -157,10 +158,10 @@ const NewAnnouncementPage = ({params,} : {
                                 <p>Categoria do produto:</p>
 
                                 <Select onValueChange={(value) => setValue("announcementCategorie", value)}>
-                                    <SelectTrigger className="bg-slate-800 border-slate-900" id="categorie">
+                                    <SelectTrigger className="bg-zinc-900 border-zinc-300 text-zinc-300" id="categorie">
                                         <SelectValue placeholder="Escolher" />
                                     </SelectTrigger>
-                                    <SelectContent position="popper" className="bg-slate-900  text-zinc-300 border-slate-900 ">
+                                    <SelectContent position="popper" className="bg-zinc-950  text-zinc-300 border-zinc-300 text-zinc-300 ">
                                         <SelectItem value="GAMER">Gamer</SelectItem>
                                         <SelectItem value="CASA">Casa</SelectItem>
                                         <SelectItem value="ROUPAS E ACESSORIOS">Roupas e Acessórios</SelectItem>
@@ -177,14 +178,14 @@ const NewAnnouncementPage = ({params,} : {
                             
                             <div className="space-y-3">
                                 <p>Imagens do produto: </p>
-                                        <Input className="bg-slate-800 border-slate-900 focus-visible:ring-transparent"
+                                        <Input className="bg-zinc-900 border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
                                         type="file" onChange={handleAnnouncementFile } accept="image/*" multiple/>
 
                             </div>
                             
                             <div>
                                 <p className="justify-center items-center flex">
-                                    <Button className="bg-slate-800 gap-3 hover:bg-zinc-700" type="submit">
+                                    <Button className="bg-zinc-300 text-black gap-3 hover:bg-zinc-400" type="submit">
                                             Anunciar 
                                             <RocketIcon size={"15px"}/>
                                     </Button>

@@ -103,10 +103,10 @@ const RegisterFormShema = z.object({
 
     return (
     <>
-     <nav className="flex flex-row gap-4 items-center pb-20 mt-5 ml-5 rounded-xl mr-5
-     space-x-5 uppercase text-zinc-300 justify-center text-xl bg-zinc-900">
+     <nav className="flex flex-row gap-4 container items-center pb-12 mt-5 ml-5 rounded-xl mr-5
+     space-x-5 uppercase text-zinc-300 justify-center text-xl bg-zinc-950 border-[0.5px] border-muted-foreground">
             
-            <span className=" flex items-center">
+            <span className="flex items-center justify-center mt-10">
                         <h1>Goober</h1>
                         
                         <ShoppingCartIcon className="text-zinc-300"/>
@@ -115,32 +115,32 @@ const RegisterFormShema = z.object({
 
         <div className="flex items-center justify-center min-h-screen ">
             
-            <div className="container flex flex-col gap-10 bg-zinc-700 max-w-prose rounded-xl p-10 border-zinc-900 border-solid border-4">
+            <div className="container flex flex-col gap-10 bg-zinc-950 max-w-prose border-muted-foreground rounded-xl p-10 border-solid border-black border-[1px]">
 
-                <h2 className="font-bold text-xl">Insira seus dados de registro:</h2>
+                <h2 className="font-bold text-xl text-zinc-300">Insira seus dados de registro:</h2>
 
                 {message}
 
 
-                <form className="space-y-2" onSubmit={handleSubmit(handleRegisterSubmit)} encType="multipart/form-data">
+                <form className="space-y-3" onSubmit={handleSubmit(handleRegisterSubmit)} encType="multipart/form-data">
                     
-                    <label className="block text-zinc-300">Nome completo: </label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("userName")} type="text"/>
-                    <label className="block text-zinc-300">Email: </label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("userEmail")} type="text"/>
+                    <label className="text-zinc-300">Nome completo: </label>
+                        <Input className="border-zinc-300 border-[1px] border-muted-foreground bg-zinc-900 text-zinc-300" {...register("userName")} type="text"/>
+                    <label className="text-zinc-300">Email: </label>
+                        <Input className="border-zinc-300 border-[1px] border-muted-foreground bg-zinc-900 text-zinc-300" {...register("userEmail")} type="text"/>
 
-                    <label className="block text-zinc-300">Senha: </label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("userPassword")} type="text"/>
+                    <label className="text-zinc-300">Senha: </label>
+                        <Input className="border-zinc-300 border-[1px] border-muted-foreground bg-zinc-900 text-zinc-300" {...register("userPassword")} type="text"/>
                     
-                    <label className="block text-zinc-300">Confirme sua senha: </label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600" {...register("confirmPassword")} type="text"></Input>
+                    <label className="text-zinc-300">Confirme sua senha: </label>
+                        <Input className="border-zinc-300 border-[1px] border-muted-foreground bg-zinc-900 text-zinc-300" {...register("confirmPassword")} type="text"></Input>
 
-                    <label className="block text-zinc-300">Sua foto de perfil:</label>
-                        <Input className="border-zinc-900 border-2 bg-zinc-600"
+                    <label className="text-zinc-300">Sua foto de perfil:</label>
+                        <Input className="border-zinc-300 border-[1px] border-muted-foreground bg-zinc-900 text-zinc-300"
                         accept="image/*" type="file" onChange={handleFileChange}></Input>
 
 
-                    <Button type="submit">Enviar</Button>
+                    <Button type="submit" className="bg-zinc-300 text-black hover:bg-zinc-400">Enviar</Button>
 
                 </form>
             </div>

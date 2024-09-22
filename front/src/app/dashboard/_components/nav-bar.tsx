@@ -15,40 +15,31 @@ export const NavBar = () => {
     
 
     return (
-    <>
-       <nav className="flex flex-col gap-4   mt-5 ml-5 rounded-t-xl mr-5
-     text-zinc-300 text-xl bg-zinc-900">
-        <div className="flex flex-row gap-4 flex-grow">
-            <Link href="/dashboard/home">
-                <span className="flex-row flex gap-3 ml-20 mt-9 hover:opacity-75 transition">
-
-                    <h1 className="uppercase">Goober</h1>
-                    <ShoppingCartIcon/>    
-                </span> 
-            </Link>
-
-                <span className="flex flex-grow justify-center ml-60 items-center gap-3 mt-8" >
-
-                    <SearchBar/>
-
+        <>
+        <div className="container w-screen flex flex-row items-center justify-center">
+            <nav className="flex w-screen items-center gap-20 m-5 pb-10 rounded-xl text-zinc-300 text-xl bg-zinc-950 border border-muted-foreground">
+                
+                <Link href="/dashboard/home">
+                    <span className="flex ml-10 gap-3 mt-9 hover:opacity-75 transition">
+                        <h1 className="uppercase">Goober</h1>
+                        <ShoppingCartIcon />
+                    </span>
+                </Link>
+    
+                <span className="mt-8 flex flex-grow justify-center mr-32">
+                    <SearchBar />
                 </span>
 
-                <span className="flex flex-grow justify-center mt-8 absolute right-72 items-center">
-                    <NewAnnouncement/>
+    
+                <span className="flex flex-col mr-8 absolute right-14 gap-4 mt-8">
+                    <UserData />
+                    <NewAnnouncement />
                 </span>
-
-                <span className="flex flex-grow justify-center items-center gap-3 mt-8 hover:opacity-75 transition">
-
-                    <UserData/>
-
-                </span>
+            </nav>
         </div>
-       </nav>
-
-        <div className="z-10">
-            <FilterBar/>
-        </div>  
+    
     </>
+    
     
     )
 
