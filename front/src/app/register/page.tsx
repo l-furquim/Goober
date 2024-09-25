@@ -82,12 +82,9 @@ const RegisterFormShema = z.object({
 
 
             try{
-                const response = await fetch('http://localhost:8080/user/register', {
-                    method: 'POST',
-                    body: form, 
-                  });
+                const response = await backEndApi.post("user/register", form);
 
-                if(response){
+                if(response.data){
                     setMessage( <CustomAlert type={CustomAlertType.SUCESS} title="Sucesso" 
                         msg="confirmação enviada no seu email" ></CustomAlert>)
                 }

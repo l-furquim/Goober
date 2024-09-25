@@ -44,11 +44,11 @@ import { z } from "zod"
 
             try{
 
-                const response = await backEndApi.post("user/login", JSON.stringify({email,password}));
+                const response = await backEndApi.post("user/login", JSON.stringify({email, password}));
 
                 if(response.data){
 
-                    const {token} = response.data;
+                    const {token} = response.data
                     
                     context.signIn(token);
                     
@@ -95,7 +95,7 @@ import { z } from "zod"
                                <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("email")} type="text"/>
        
                            <label className="block text-zinc-300">Senha: </label>
-                               <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("password")} type="text"/>
+                               <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("password")} type="password"/>
        
                            <Button className="bg-zinc-300 text-black hover:bg-zinc-400" type="submit">Enviar</Button>
        

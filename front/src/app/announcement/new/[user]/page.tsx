@@ -22,7 +22,7 @@ import {
 
 export type NewAnnouncementRequestType = {
     announcementName: String,
-    annoncementDescription: String,
+    announcementDescription: String,
     announcementPrice: Number,
     announcementCategorie: String,
     announcerToken: String
@@ -76,7 +76,7 @@ const NewAnnouncementPage = ({params,} : {
 
         const announcementJson: NewAnnouncementRequestType = {
             announcementName: announcementName,
-            annoncementDescription: announcementDescription,
+            announcementDescription: announcementDescription,
             announcementPrice: parseFloat(announcementPrice),
             announcementCategorie: announcementCategorie.toString(),
             announcerToken: userCookies,
