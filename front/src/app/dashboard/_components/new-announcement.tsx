@@ -22,7 +22,7 @@ const NewAnnouncementButton = () => {
     return (
 
         <div className="rounded-xl">
-                <Button onClick={handleNewAnnouncement} className="bg-slate-800 hover:bg-slate-700 gap-2 p-3"> 
+                <Button onClick={handleNewAnnouncement} className="bg-white text-black hover:bg-zinc-400 gap-2 p-3"> 
                     <PlusCircleIcon size={"15px"}/>
                     Anunciar
                 </Button>

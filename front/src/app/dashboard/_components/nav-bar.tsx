@@ -16,25 +16,25 @@ export const NavBar = () => {
 
     return (
         <>
-        <div className="container w-screen flex flex-row items-center justify-center">
-            <nav className="flex w-screen items-center gap-20 m-5 pb-10 rounded-xl text-zinc-300 text-xl bg-zinc-950 border border-muted-foreground">
+        <div className="w-screen flex flex-row items-center justify-center">
+            <nav className="flex w-screen items-center justify-center gap-20 m-5 pb-14 rounded-xl text-zinc-300 text-xl bg-zinc-950 border border-muted-foreground">
                 
                 <Link href="/dashboard/home">
-                    <span className="flex ml-10 gap-3 mt-9 hover:opacity-75 transition">
+                    <div className="flex ml-10 gap-3 mt-9 hover:opacity-75 transition">
                         <h1 className="uppercase">Goober</h1>
                         <ShoppingCartIcon />
-                    </span>
+                    </div>
                 </Link>
     
-                <span className="mt-8 flex flex-grow justify-center mr-32">
+                <div className="mt-8 flex flex-grow justify-center mr-32">
                     <SearchBar />
-                </span>
+                </div>
 
     
-                <span className="flex flex-col mr-8 absolute right-14 gap-4 mt-8">
+                <div className="flex flex-col mr-8 absolute right-14 gap-4 mt-10">
                     <UserData />
                     <NewAnnouncement />
-                </span>
+                </div>
             </nav>
         </div>
     

@@ -92,20 +92,16 @@ import { z } from "zod"
                        <form className="space-y-2" onSubmit={handleSubmit(handleLoginSubmit)}>
                            
                            <label className="block text-zinc-300">Email: </label>
-                               <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("email")} type="text"/>
+                               <Input className="border-zinc-300 text-center text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("email")} type="text"/>
        
                            <label className="block text-zinc-300">Senha: </label>
-                               <Input className="border-zinc-300 text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("password")} type="text"/>
+                               <Input className="border-zinc-300 text-center text-zinc-300 border-muted-foreground border-[1px] bg-zinc-900" {...register("password")} type="password"/>
        
                            <Button className="bg-zinc-300 text-black hover:bg-zinc-400" type="submit">Enviar</Button>
        
                        </form>
                    </div>
                </div>
-
-        <Link href={"/"}>
-            <footer className="text-right mr-10 mb-10 text-muted-foreground">Sobre nós</footer>
-        </Link>
            </>
         )
 

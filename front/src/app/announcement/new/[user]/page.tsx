@@ -122,8 +122,8 @@ const NewAnnouncementPage = ({params,} : {
         
     <>
     <NavBar/>
-        <div className="container flex items-center justify-center">
-            <div className="flex-col mt-10 text-zinc-300 container p-16 rounded-xl justify-center 
+        <div className=" flex items-center justify-center">
+            <div className="flex flex-col mt-10 text-zinc-300 p-16 rounded-xl justify-center 
             w-[600px] h-[700px] bg-zinc-950 border border-muted-foreground border-zinc-300 ">
                     
                     {message}
