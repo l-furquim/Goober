@@ -11,8 +11,7 @@ const dashboardLayout = ({
     return (
 
         <div>
-            <NavBar/>
-            <FeedPage/>    
+            <NavBar/>  
             {children}
         </div>
 

@@ -1,72 +1,55 @@
 'use client'
 
-import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
-import AnnouncementContainer from "@/components/annoucement/annoucement-container";
 import { backEndApi } from "@/lib/api";
-import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
-import Image from "next/image";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-export type ProductProps = {
-    productId: String,
-    productName: String
-    productPrice: String,
-    productCategorie: String,
-    productDescription: String,
-    productImages: String
-};
-export type AnnouncementProps = {
-    announcementId: String,
-    announcementName: String,
-    announcementPrice: Number,
-    announcementLikes: Number,
-    announcementQuestions: Number,
-    announcerId: String,
-    productImages: String
-    products: ProductProps[],
-    productQuestions: Number
-};
-export type GetAllAnnouncementsResponse = {
-    announces: AnnouncementProps[]
-};
+import { AnnouncementProps, GetAllAnnouncementsResponse} from "../../_components/feed-page";
+import { AxiosError } from "axios";
+import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
+import { Link } from "lucide-react";
 
-
-const FeedPage = () => {
-
-
-    const [announcement, setAnnouncements] = useState<AnnouncementProps[]>([]);
+const SearchPage = () => {
+   
+    const searchParam = useSearchParams()?.get("term");
     const [message, setMessage] = useState(<></>);
-    const userCookie = getCookie("goober-auth");
+    const cookie = getCookie("goober-auth");
+    const [announcements, setAnnouncements] = useState<AnnouncementProps[]>([]);
 
+    useEffect(()=> {
 
-    useEffect(() => {
-        const GetAnnouncements  = async() => {
-            try{
-                const response = await backEndApi.get("announcement/find/all", {
+        const getAnnouncementByFilter = async() => {
+            try{    
+    
+                const response = await backEndApi.get(`announcement/find/search=${searchParam}`, {
                     headers: {
-                        'Authorization': `Bearer ${userCookie}`
+                        'Authorization': `Bearer ${cookie}`
                     }
                 });
-                
+    
                 if(response.data){
                     const announcements = response.data as GetAllAnnouncementsResponse;
-
+                    console.log(announcements)
                     setAnnouncements(announcements.announces);
                 }
+    
             }catch(e){
                 const axiosError = e as AxiosError;
-                setMessage(<CustomAlert type={CustomAlertType.ERROR} title={"Erro !"} msg={axiosError.message}/>)
-            }
-        }
-        GetAnnouncements()
+                setMessage(<CustomAlert type={CustomAlertType.ERROR} title={"Erro ao fazer a pesquisa!"} msg={axiosError.message}/>)
+            }     
+        } 
+        getAnnouncementByFilter();
 
-    }, [userCookie])
+    }, [cookie])
+
 
     return (
-        <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-950  w-full gap-10 h-fit">
+    <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-950  w-full gap-10 h-fit">
+    
+        {message}
 
-            {announcement.map((ann) => (
+
+        {announcements.map((ann) => (
             <ul
                 key={ann.announcementId.toString()}
                 className="flex h-72 w-1/4 mt-20 max-w-[calc(100%/3-10px)]
@@ -94,9 +77,9 @@ const FeedPage = () => {
                 </div>
             </ul>
                 ))}
-        </div>
-    );
+    </div>
 
+    )
 }
 
-export default FeedPage;
+export default SearchPage;
