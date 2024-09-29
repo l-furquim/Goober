@@ -18,7 +18,6 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
 
     function signIn(token: String){
 
-        console.log(token);
 
         setCookie("goober-auth", token, {
             maxAge: 60 * 60 * 3 

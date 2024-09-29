@@ -5,14 +5,15 @@ import back.domain.model.product.Product;
 import back.domain.model.question.Question;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 
 
-public class Announcement {
-
+public class Announcement implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private UUID announcementId;
 

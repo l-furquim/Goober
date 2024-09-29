@@ -7,12 +7,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 
-public class Product {
-
+public class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private UUID productId;
 

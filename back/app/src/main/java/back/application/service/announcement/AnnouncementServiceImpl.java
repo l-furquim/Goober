@@ -15,6 +15,9 @@ import back.domain.port.out.AnnouncementRepository;
 import back.domain.port.out.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    @CacheEvict(value = "announcements", allEntries = true)
     public Announcement createAnnouncement(CreateAnnouncementRequestDto createAnnouncementRequestDto,
                                            User announcer, String imagesPath) {
         if(createAnnouncementRequestDto.announcementName().isBlank()){
@@ -67,15 +71,16 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         try{
             announcementRepository.save(announcement);
             productRepository.save(product);
+            return announcement;
         }catch (IllegalArgumentException e){
             throw new UserException(e.getMessage());
         }catch(OptimisticLockingFailureException e) {
             throw new UserException((e.getMessage()));
         }
-        return announcement;
     }
 
     @Override
+    @CacheEvict(value = "announcements", key = "#deleteAnnouncementRequestDto.id()")
     public void deleteAnnouncement(DeleteAnnouncementRequestDto deleteAnnouncementRequestDto) {
         var aAnnouncement = announcementRepository.findAnnouncementById(deleteAnnouncementRequestDto.id());
 
@@ -94,6 +99,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
     @Transactional
     @Override
+    @CachePut(value = "announcements", key = "#updateAnnouncementPriceRequestDto.id()")
     public void updateAnnouncementPrice(UpdateAnnouncementPriceRequestDto updateAnnouncementPriceRequestDto) {
         var aAnnouncement = announcementRepository.findAnnouncementById(updateAnnouncementPriceRequestDto.id());
 
@@ -107,6 +113,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Transactional
     @Override
+    @CachePut(value = "announcements", key = "#updateAnnouncementNameRequestDto.id()")
     public void updateAnnouncementName(UpdateAnnouncementNameRequestDto updateAnnouncementNameRequestDto) {
         var aAnnouncement = announcementRepository.findAnnouncementById(updateAnnouncementNameRequestDto.id());
 
@@ -153,6 +160,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    @Cacheable("announcements")
     public List<Announcement> findAll() {
         return announcementRepository.findAll();
     }

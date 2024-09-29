@@ -50,7 +50,6 @@ const RegisterFormShema = z.object({
         const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             if (e.target.files && e.target.files.length > 0) {
                 setUserImage(e.target.files[0]);
-                console.log("Imagem selecionada:", e.target.files[0]);  // Verificação adicional
             }
         };
         
@@ -75,11 +74,6 @@ const RegisterFormShema = z.object({
             if (userImage) {
                 form.append("userImage", userImage);
             }
-        
-            form.forEach((value, key)=> (
-                console.log(value, key)
-            ));
-
 
             try{
                 const response = await fetch('http://localhost:8080/user/register', {

@@ -8,6 +8,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useEffect, useState } from "react";
+
+
 export type ProductProps = {
     productId: String,
     productName: String
@@ -43,15 +45,15 @@ const FeedPage = () => {
     useEffect(() => {
         const GetAnnouncements  = async() => {
             try{
+                
                 const response = await backEndApi.get("announcement/find/all", {
                     headers: {
                         'Authorization': `Bearer ${userCookie}`
                     }
-                });
-                
+                });    
                 if(response.data){
                     const announcements = response.data as GetAllAnnouncementsResponse;
-                    console.log(response.data);
+                    console.log(response.headers);    
 
                     setAnnouncements(announcements.announces);
                 }
@@ -70,7 +72,7 @@ const FeedPage = () => {
             {announcement.map((ann) => (
             <ul
                 key={ann.announcementId.toString()}
-                className="flex h-full w-1/4 mt-20 max-w-[calc(100%/3-10px)]
+                className="flex h-fit w-1/4 mt-20 max-w-[calc(100%/3-10px)]
                 rounded-xl bg-zinc-900 border border-zinc-950 border-muted-foreground list-none
                 hover:border-gray-500 transition duration-400"
             >

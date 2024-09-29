@@ -88,9 +88,6 @@ const NewAnnouncementPage = ({params,} : {
            announcementImages.forEach(image => form.append("announcementImages", image));
         }
 
-        form.forEach((item => console.log(item)));
-        console.log(announcementCategorie);
-        
         try{    
 
             const response = await fetch('http://localhost:8080/announcement/create', {

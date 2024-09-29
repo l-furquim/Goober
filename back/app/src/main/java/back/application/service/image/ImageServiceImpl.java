@@ -6,6 +6,9 @@ import back.domain.port.in.ImageService;
 import back.domain.port.out.ImageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,6 +78,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @CacheEvict(value = "announcementImages", allEntries = true)
     public String saveMultipleImages(List<MultipartFile> images, String rootPath) {
             images.forEach(image-> {
                 try {
@@ -102,6 +106,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Cacheable("announcementImages")
     public byte[] findImageByDirName(String dirName) {
         Path dirPath = Paths.get(UPLOAD_DIR, dirName);
 

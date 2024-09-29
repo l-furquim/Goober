@@ -1,17 +1,16 @@
 package back.adapter.in.web.controller.announcement;
 
 
-import back.adapter.in.web.controller.announcement.dto.CreateAnnouncementRequestDto;
-import back.adapter.in.web.controller.announcement.dto.CreateAnnouncementResponseDto;
-import back.adapter.in.web.controller.announcement.dto.FindAllAnnouncementsResponseDto;
-import back.adapter.in.web.controller.announcement.dto.FindAnnouncementIfContainsResponseDto;
+import back.adapter.in.web.controller.announcement.dto.*;
 import back.domain.port.in.AnnouncementService;
 import back.domain.port.in.AuthService;
 import back.domain.port.in.ImageService;
 import back.domain.port.in.UserService;
+import com.google.common.net.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/announcement")
@@ -82,10 +83,14 @@ public class AnnouncementController {
     public ResponseEntity<byte[]> getAnnouncementsImages(@PathVariable("announcementPath") String annPath){
         var images=  imageService.findImageByDirName("announcement/"+ annPath);
 
-        log.info(annPath);
-
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(images);
     }
 
+    @DeleteMapping("/delete/{announcementId}")
+    public ResponseEntity<Void> deleteAnnouncement(@PathVariable("announcementId") String id){
+        announcementService.deleteAnnouncement(new DeleteAnnouncementRequestDto(UUID.fromString(id)));
+
+        return ResponseEntity.ok().build();
+    }
 
 }

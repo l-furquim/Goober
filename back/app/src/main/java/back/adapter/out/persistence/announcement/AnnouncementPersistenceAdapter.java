@@ -49,11 +49,11 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
     public void delete(Announcement announcement) {
 
 
-        var anEntity = announcementJpaRepository.findById(UUID.fromString(announcement.getAnnouncerId()));
+        var anEntity = announcementJpaRepository.findById(announcement.getAnnouncementId());
 
 
 
-        announcementJpaRepository.save(anEntity.get());
+        announcementJpaRepository.delete(anEntity.get());
     }
 
     @Override
