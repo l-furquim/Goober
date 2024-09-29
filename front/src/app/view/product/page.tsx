@@ -1,36 +1,27 @@
 'use client'
 
+import { AnnouncementProps, GetAllAnnouncementsResponse } from "@/app/dashboard/_components/feed-page";
 import { NavBar } from "@/app/dashboard/_components/nav-bar";
+import { AnnouncementsList } from "@/components/annoucement/annoucement-container";
 import { Button } from "@/components/ui/button";
+import { getCookie } from "cookies-next";
 import { HandshakeIcon, HeartIcon, MapPin, ShoppingCartIcon, Tags } from "lucide-react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 
 
-export default  function ProductContainer ({params}: {params: {product: string};}) {
+ const ProductContainer = ()=> {
+    const router = useRouter();
+    const {announcementId,announcementName,announcementPrice} = router.query;
 
-    const searchParams = useSearchParams();
-
-    const name = searchParams.get("name");
-    const category = searchParams.get('category');
-    const price = searchParams.get("price");
-
-    const imagesUrl = ['foto morangao.png', 'mouseGamer.webp', 'fotocachorrao.jpg'];
-
-    const [imageSelected, setImageSelected] = useState(imagesUrl.at(0));
+    const userCookie = getCookie("goober-auth");
+    const [imageSelected, setImageSelected] = useState();
 
     const [selected, setSelected] = useState(false);
-
-    const descriptions = ['Morangao bala ultra 4k com 4 portas ultra air bag muita coisa maneira compra ai otario ' + 
-        'EOJWEOQJEWQIOJEWQOIEJQWOIEJQEOIQWJEOIWQJoiQJ'
-    ];
-
-    const categories = ['GAMER', 'LIMPEZA'];
-
-    const questions = ['faz parcelado em 3 anos?', 'manda no peito do pai', 'odiei'];
-    
+    const questions = ["Faz o L"]
 
     const handleSwith = () => {
         setSelected(!selected);
@@ -45,9 +36,9 @@ export default  function ProductContainer ({params}: {params: {product: string};
             absolute right-14 ml-8 mt-10 h-[450px] rounded-xl max-w-full w-2/5 gap-10 ">
                 
                 <p className="text-4xl flex flex-row items-center justify-center gap-3 mt-5 text-zinc-300">
-                    R$ {price} <Tags className="text-zinc-900" size={"35px"}/>
+                    R$ {announcementPrice.toString()} <Tags className="text-zinc-900" size={"35px"}/>
                 </p>
-                <p className="text-xl text-zinc-300"> {name}</p>
+                <p className="text-xl text-zinc-300"> {announcementId.announcementName}</p>
                 <div className="container space-y-5 bg-zinc-900 h-40 w-80  items-center justify-normal flex flex-col rounded-xl">
                     <p className="mt-5  text-zinc-300 ">{"Lucas Hernandes Furquim"}</p>
                     <hr className="border-1 w-32"/>
@@ -72,16 +63,6 @@ export default  function ProductContainer ({params}: {params: {product: string};
             
             <div className="flex flex-row items-center">
               <div className="flex flex-col space-y-3"> 
-              {imagesUrl.map((image) => (
-                    <p onClick={() => {setImageSelected(image); handleSwith();} } 
-                    className="w-16 flex-col flex h-16 ml-3 bg-black mr-4 border border-solid border-black">
-                    
-                    <Image alt={`imagem-${image}`} width={"54"} height={"54"}
-                    src={`/images/${image}`} style={{borderColor: selected ? 'purple' : 'black', borderRadius: selected? 3: 0,
-                      width: '100%', height: '100%',  }}/>
-                    </p>
-              
-              ))}
               </div>
             
                  <Image
@@ -94,17 +75,15 @@ export default  function ProductContainer ({params}: {params: {product: string};
 
 
                         
-                {descriptions.map((desc) => (
+                
                 <>      
                         <div className=" flex-col containerh-[300px] flex items-center justify-start 
                         absolute left-40 ml-8 mt-40 p-10 rounded-xl max-w-full w-2/6  ">
-                                <div className="flex flex-row gap-8">{categories.map((cat) => (
-                                    <p className="container rounded-sm mt-5 bg-teal-950 text-zinc-300 ">{cat}</p>
-                                
-                                ))}
+                                <div className="flex flex-row gap-8">
+                                    <p className="container rounded-sm mt-5 bg-teal-950 text-zinc-300 ">{"GAMER"}</p>
                                 </div>
                                 
-                                <p className="flex flex-row  left-20 mt-10 text-zinc-300 text-xl">{desc}</p>
+                                <p className="flex flex-row  left-20 mt-10 text-zinc-300 text-xl">????</p>
                                 <hr className="border-1 mt-10 w-[600px]"></hr>
                                 
                                 <div className="flex mt-30 p-10 flex-col justify-center items-center gap-20 ">
@@ -120,10 +99,10 @@ export default  function ProductContainer ({params}: {params: {product: string};
                         </div>
                         
                 </>    
-                ))}
-
         </div>
         </>
     );
 
 };
+
+export default ProductContainer;

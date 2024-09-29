@@ -41,7 +41,6 @@ const FeedPage = () => {
     const [message, setMessage] = useState(<></>);
     const userCookie = getCookie("goober-auth");
 
-
     useEffect(() => {
         const GetAnnouncements  = async() => {
             try{
@@ -56,6 +55,7 @@ const FeedPage = () => {
                     console.log(response.headers);    
 
                     setAnnouncements(announcements.announces);
+                    
                 }
             }catch(e){
                 const axiosError = e as AxiosError;
@@ -77,7 +77,10 @@ const FeedPage = () => {
                 hover:border-gray-500 transition duration-400"
             >
                 <div>
-                    <Link href={`/view/product?name=${ann.announcementName}&price=120&category=gamer`}>
+                    
+                    <Link href={{pathname:`/view/product?name=${ann.announcementName}&price=${ann.announcementPrice}&category=${ann.products.at(0)?.productCategorie}`,
+                          query: JSON.stringify(ann)
+                    }}>
                         <li className="p-4 text-zinc-300">
                             {ann.announcementName.substring(0,35)}
                             
@@ -93,6 +96,9 @@ const FeedPage = () => {
                             </div>
                         </li>
                     </Link>
+
+
+            
                 </div>
             </ul>
                 ))}
