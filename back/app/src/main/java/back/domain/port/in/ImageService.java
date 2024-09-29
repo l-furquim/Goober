@@ -1,6 +1,7 @@
 package back.domain.port.in;
 
 import back.domain.model.image.Image;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,4 +12,5 @@ public interface ImageService {
     Image findImageById(String id);
     void deleteImage(String id);
     String saveMultipleImages(List<MultipartFile> images, String rootPath);
+    byte[] findImageByDirName(String dirName);
 }

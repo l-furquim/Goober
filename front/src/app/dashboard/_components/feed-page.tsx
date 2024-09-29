@@ -1,12 +1,12 @@
 'use client'
 
 import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
-import AnnouncementContainer from "@/components/annoucement/annoucement-container";
 import { backEndApi } from "@/lib/api";
 import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 import { useEffect, useState } from "react";
 export type ProductProps = {
     productId: String,
@@ -51,6 +51,7 @@ const FeedPage = () => {
                 
                 if(response.data){
                     const announcements = response.data as GetAllAnnouncementsResponse;
+                    console.log(response.data);
 
                     setAnnouncements(announcements.announces);
                 }
@@ -69,7 +70,7 @@ const FeedPage = () => {
             {announcement.map((ann) => (
             <ul
                 key={ann.announcementId.toString()}
-                className="flex h-72 w-1/4 mt-20 max-w-[calc(100%/3-10px)]
+                className="flex h-full w-1/4 mt-20 max-w-[calc(100%/3-10px)]
                 rounded-xl bg-zinc-900 border border-zinc-950 border-muted-foreground list-none
                 hover:border-gray-500 transition duration-400"
             >
@@ -77,17 +78,16 @@ const FeedPage = () => {
                     <Link href={`/view/product?name=${ann.announcementName}&price=120&category=gamer`}>
                         <li className="p-4 text-zinc-300">
                             {ann.announcementName.substring(0,35)}
-                            {/* {announcementImages.map(image => (
+                            
                             <div>
                                 <Image
-                                    width={600} height={300} src={image.toString()}
+                                    width={600} height={300}
+                                     src={`http://localhost:8080/announcement/get/images/src/main/resources/static/images/announcement/${encodeURIComponent(ann.announcementName.toString())}`}
+                                    
                                     alt="Mouse gamer"
-                                    style={{ transform: 'scale(0.7)' }}/>
-                                <p className="text-2xl font-bold">{ann.announcementPrice.toString()}</p>
-                            </div>
-                            ))} */}
-                            <div>
-                                {ann.announcementPrice.toString()}
+                                    style={{ transform: 'scale(0.6)' }}/>                                                                
+                                <p className="text-2xl font-bold">R$ {ann.announcementPrice.toString()}</p>
+
                             </div>
                         </li>
                     </Link>

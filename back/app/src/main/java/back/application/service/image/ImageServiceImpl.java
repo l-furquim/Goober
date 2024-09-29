@@ -4,22 +4,28 @@ import back.domain.exception.ImageException;
 import back.domain.model.image.Image;
 import back.domain.port.in.ImageService;
 import back.domain.port.out.ImageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ImageServiceImpl implements ImageService {
 
+    private static final Logger log = LoggerFactory.getLogger(ImageServiceImpl.class);
     private final ImageRepository imageRepository;
     private final GridFsTemplate template;
+
 
     private static String UPLOAD_DIR = "src/main/resources/static/images/";
 
@@ -94,4 +100,44 @@ public class ImageServiceImpl implements ImageService {
             });
         return UPLOAD_DIR + rootPath;
     }
+
+    @Override
+    public byte[] findImageByDirName(String dirName) {
+        Path dirPath = Paths.get(UPLOAD_DIR, dirName);
+
+        if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
+            try {
+
+                List<Path> imagePaths = Files.list(dirPath)
+                        .filter(Files::isRegularFile)
+                        .filter(path -> {
+
+                            String fileName = path.getFileName().toString().toLowerCase();
+                            return fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg") || fileName.endsWith(".webp");
+                        })
+                        .collect(Collectors.toList());
+
+                if (imagePaths.isEmpty()) {
+                    throw new ImageException("Nenhuma imagem encontrada no diretório: " + dirPath.toString());
+                }
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                for (Path imagePath : imagePaths) {
+                    byte[] imageBytes = Files.readAllBytes(imagePath);
+                    outputStream.write(imageBytes);
+                }
+
+                return outputStream.toByteArray();
+
+            } catch (IOException e) {
+                throw new ImageException("Erro ao processar as imagens no diretório: " + dirName + " - " + e.getMessage());
+            }
+
+        } else {
+            throw new ImageException("Diretório não encontrado: " + dirPath.toString());
+        }
+    }
+
+
+
 }
