@@ -4,6 +4,7 @@ import { SearchBar } from "./search-bar"
 import { UserData } from "./user-data"
 import { ShoppingCartIcon } from "lucide-react"
 import NewAnnouncement from "./new-announcement"
+import React from "react"
 
 export const NavBar = () => {   
 
@@ -32,7 +33,7 @@ export const NavBar = () => {
 
     
                 <div className="flex flex-col mr-8 absolute right-14 gap-4 mt-10">
-                    <UserData />
+                    <UserData/>
                     <NewAnnouncement />
                 </div>
             </nav>
