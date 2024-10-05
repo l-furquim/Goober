@@ -3,12 +3,16 @@
 import { NavBar } from "@/app/dashboard/_components/nav-bar";
 import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { backEndApi } from "@/lib/api";
 import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
+import { PencilIcon } from "lucide-react";
 import { headers } from "next/headers";
 import React from "react";
 import { useEffect, useState } from "react";
+import ChangeEmail from "./_components/change-email";
+
 
 export type GetUserDataResponseType = {
     userEmail: String,
@@ -65,7 +69,13 @@ const UserPage = ({params}: {params: {user: String}}) => {
              <h1 className="text-zinc-300 font-bold">{userData?.userName}</h1>
              
              <div>
-                 <p>{userData?.userEmail}</p>
+                 <div className="flex flex-row gap-4 items-center">
+                    
+                    {userData?.userEmail} 
+                    
+                    <ChangeEmail userEmail={userData.userEmail}/>
+
+                </div>
              </div>
  
          </div>

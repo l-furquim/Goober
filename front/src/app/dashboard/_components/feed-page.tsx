@@ -78,24 +78,27 @@ const FeedPage = () => {
             >
                 <div>
                     
-                    <Link href={{pathname:`/view/product?name=${ann.announcementName}&price=${ann.announcementPrice}&category=${ann.products.at(0)?.productCategorie}`,
-                          query: JSON.stringify(ann)
-                    }}>
-                        <li className="p-4 text-zinc-300">
-                            {ann.announcementName.substring(0,35)}
-                            
-                            <div>
-                                <Image
-                                    width={600} height={300}
-                                     src={`http://localhost:8080/announcement/get/images/src/main/resources/static/images/announcement/${encodeURIComponent(ann.announcementName.toString())}`}
-                                    
-                                    alt="Mouse gamer"
-                                    style={{ transform: 'scale(0.6)' }}/>                                                                
-                                <p className="text-2xl font-bold">R$ {ann.announcementPrice.toString()}</p>
+                   {ann.products ? (
+                     <Link href={`/view/product/id/${ann.announcementId}`      
+                  }>
+                      <li className="p-4 text-zinc-300">
+                          {ann.announcementName.substring(0,35)}
+                          
+                          <div>
+                              <Image
+                                  width={600} height={300}
+                                   src={`http://localhost:8080/announcement/get/images/src/main/resources/static/images/announcement/${encodeURIComponent(ann.announcementName.toString())}`}
+                                  
+                                  alt="Mouse gamer"
+                                  style={{ transform: 'scale(0.6)' }}/>                                                                
+                              <p className="text-2xl font-bold">R$ {ann.announcementPrice.toString()}</p>
 
-                            </div>
-                        </li>
-                    </Link>
+                          </div>
+                      </li>
+                  </Link>
+                   ): (
+                    <p>Anuncio sem produtos disponiveis</p>
+                   )}
 
 
             

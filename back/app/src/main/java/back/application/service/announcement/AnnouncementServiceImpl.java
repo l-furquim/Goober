@@ -4,6 +4,7 @@ import back.adapter.in.web.controller.announcement.dto.CreateAnnouncementRequest
 import back.adapter.in.web.controller.announcement.dto.DeleteAnnouncementRequestDto;
 import back.adapter.in.web.controller.announcement.dto.UpdateAnnouncementNameRequestDto;
 import back.adapter.in.web.controller.announcement.dto.UpdateAnnouncementPriceRequestDto;
+import back.adapter.out.persistence.mapper.announcement.AnnouncementMapper;
 import back.domain.enums.ProductCategories;
 import back.domain.exception.AnnouncementException;
 import back.domain.exception.UserException;
@@ -192,5 +193,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         }
 
         return uniqueAnnouncements;
+    }
+
+    @Override
+    public Announcement findAnnouncementById(String id) {
+        var announcement = announcementRepository.findAnnouncementById(UUID.fromString(id));
+
+        return announcement.get();
     }
 }

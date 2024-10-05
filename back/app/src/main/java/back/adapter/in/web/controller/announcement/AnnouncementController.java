@@ -93,4 +93,12 @@ public class AnnouncementController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<FindAnnouncementByIdResponseDto> findAnnouncementById(@PathVariable("id")String id){
+        var announcement = announcementService.findAnnouncementById(id);
+
+        return ResponseEntity.ok().body(new FindAnnouncementByIdResponseDto(announcement));
+    }
+
+
 }
