@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<RegisterUserResponseDto> registerUser(@RequestPart("registerData") RegisterUserRequestDto registerData,
                                                                 @RequestPart("userImage") MultipartFile userImage){
         
-        var path = imageService.saveImage(userImage, "user/" + registerData.userEmail());
+        var path = imageService.saveImage(userImage, "user/" + registerData.userName() + "/");
 
         userService.registerUser(registerData, userVerifierService, path);
 
@@ -76,12 +76,18 @@ public class UserController {
         return ResponseEntity.ok().body(new ValidateTokenResponseDto(isValid));
     }
 
-    @GetMapping("/profile/show/{id}")
-    public ResponseEntity<ShowUserPropsResponseDto> showUserProps(@PathVariable("id") String id){
+    @GetMapping("/get")
+    public ResponseEntity<ShowUserPropsResponseDto> showUserProps(@RequestHeader("Authorization") String token){
 
-        var user = userService.getUserPropsById(id);
+        var user = authService.getUserByToken(token.substring(7));
 
         return ResponseEntity.ok().body(new ShowUserPropsResponseDto(user.getUserEmail(), user.getUserName(), user.getUserImage()));
+    }
+    @GetMapping("/get/image/src/main/resources/static/images/user/{userName}")
+    public ResponseEntity<byte[]> getUserImage(@PathVariable("userName") String userName){
+        var images = imageService.findImageByDirName("user/" + userName);
+
+        return ResponseEntity.ok().body(images);
     }
 
 

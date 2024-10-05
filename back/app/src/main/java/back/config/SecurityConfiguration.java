@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "user/verifierCode").permitAll())
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "user/validateToken").permitAll())
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.GET, "announcement/get/images/src/main/resources/static/images/announcement/**").permitAll())
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.GET, "user/get/image/src/main/resources/static/images/user/**").permitAll())
                 .authorizeHttpRequests(authorize -> authorize.anyRequest()
                         .authenticated())
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)

@@ -4,10 +4,12 @@ import back.domain.enums.AccountStatus;
 import back.domain.exception.UserException;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
 
 
     private UUID userId;

@@ -39,6 +39,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @CacheEvict(value = "announcementImages", allEntries = true)
     public String saveImage(MultipartFile file, String rootPath) {
         try {
             Image image = new Image(
@@ -48,21 +49,22 @@ public class ImageServiceImpl implements ImageService {
                     file.getBytes()
             );
 
-            imageRepository.save(image);
 
-            Path path = Paths.get(UPLOAD_DIR + rootPath + file.getOriginalFilename());
+            Path pathTo = Paths.get(UPLOAD_DIR + rootPath + file.getOriginalFilename());
+
+            Path path = Paths.get(UPLOAD_DIR + rootPath);
 
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
             }
 
-            Files.write(path , file.getBytes());
-            return UPLOAD_DIR + file.getOriginalFilename();
+            Files.write(pathTo , file.getBytes());
+            imageRepository.save(image);
 
         }catch (IOException e){
             throw new ImageException("erro ao salvar a imagem: " + e.getMessage() + e.getCause());
         }
-
+        return UPLOAD_DIR + rootPath;
         }
 
     @Override
@@ -88,7 +90,6 @@ public class ImageServiceImpl implements ImageService {
                             image.getOriginalFilename(),
                             image.getBytes()
                     );
-                    imageRepository.save(aImage);
 
                     Path pathTo = Paths.get(UPLOAD_DIR + rootPath + image.getOriginalFilename());
 
@@ -98,6 +99,7 @@ public class ImageServiceImpl implements ImageService {
                         Files.createDirectories(path);
                     }
                     Files.write(pathTo , image.getBytes());
+                    imageRepository.save(aImage);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

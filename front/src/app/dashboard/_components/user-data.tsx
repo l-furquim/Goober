@@ -1,7 +1,8 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { UserCircleIcon } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { UserCircleIcon, UserIcon, WalletIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import qs from "qs";
@@ -38,29 +39,22 @@ export const UserData = () => {
     <div>
     
       <div onClick={onClickUser} className="flex flex-row gap-2 hover:opacity-75 transition hover:cursor-pointer">
-      Lucas<UserCircleIcon className="mt-[0.5px]"/> 
+      
+      <DropdownMenu>
+          <DropdownMenuTrigger className="flex flex-row gap-2">Lucas<UserCircleIcon className="mt-[0.5px]"/> </DropdownMenuTrigger>
+      
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                  <Link href={`/view/user/${value}`}>
+                    <DropdownMenuItem className="hover:cursor-pointer"><UserIcon size={15}/> Perfil</DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuItem><WalletIcon size={15}/> Pagamentos</DropdownMenuItem>
+             </DropdownMenuContent>
+        </DropdownMenu>
 
       </div>
     
-      {showOptions ? (
-
-        <div className="absolute flex flex-col items-center justify-center gap-3 p-14 rounded-xl bg-zinc-300 w-full h-full">
-          <div>
-            <Link href={`/view/user/${value}`}>
-              <Button>Ver perfil</Button>
-            </Link>
-          </div>
-          <div>
-            <Link href={""}>
-              <Button>Sair</Button>
-            </Link>
-          </div>
-        </div>
-
-      ): (
-        <></>
-      )}
-
     </div>
     )
     
