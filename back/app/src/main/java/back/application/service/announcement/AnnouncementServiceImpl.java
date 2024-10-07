@@ -63,12 +63,16 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 createAnnouncementRequestDto.announcementName(),
                 0,
                 0,
-                announcer.getUserId().toString(),
+                announcer.getUserName(),
                 imagesPath,
-                new ArrayList<Product>()
-        );
+                new ArrayList<Product>(),
+                createAnnouncementRequestDto.announcementStreet(),
+                createAnnouncementRequestDto.announcementNumber(),
+                createAnnouncementRequestDto.announcementState(),
+                createAnnouncementRequestDto.announcementDistrict()
+                );
 
-
+        announcement.addProducts(product);
         try{
             announcementRepository.save(announcement);
             productRepository.save(product);

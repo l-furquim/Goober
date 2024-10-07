@@ -1,25 +1,18 @@
 package back.adapter.in.web.controller.announcement;
 
-
 import back.adapter.in.web.controller.announcement.dto.*;
 import back.domain.port.in.AnnouncementService;
 import back.domain.port.in.AuthService;
 import back.domain.port.in.ImageService;
-import back.domain.port.in.UserService;
-import com.google.common.net.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/announcement")
@@ -96,6 +89,7 @@ public class AnnouncementController {
     @GetMapping("/get/{id}")
     public ResponseEntity<FindAnnouncementByIdResponseDto> findAnnouncementById(@PathVariable("id")String id){
         var announcement = announcementService.findAnnouncementById(id);
+
 
         return ResponseEntity.ok().body(new FindAnnouncementByIdResponseDto(announcement));
     }

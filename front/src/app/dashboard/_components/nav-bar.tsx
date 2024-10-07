@@ -5,6 +5,7 @@ import { UserData } from "./user-data"
 import { ShoppingCartIcon } from "lucide-react"
 import NewAnnouncement from "./new-announcement"
 import React from "react"
+import { ThemeButton } from "@/components/theme/theme-button"
 
 export const NavBar = () => {   
 

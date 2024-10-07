@@ -1,7 +1,17 @@
 'use client'
 
+import { backEndApi } from "@/lib/api";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { createContext } from "react";
+
+export type UserDataType = {
+    userId: String,
+    userName: String,
+    userEmail: String,
+    userPassword:String,
+    userImage: String,
+    status: String 
+}
 
 
 type authContextType = {
@@ -17,11 +27,10 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
     var isAuthenticated = !!recoveryToken();
 
     function signIn(token: String){
-
-
         setCookie("goober-auth", token, {
             maxAge: 60 * 60 * 3 
         });
+
     }
 
     function signOut(){
@@ -37,6 +46,7 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
 
         return token;
     }
+
 
     return (
         <AuthContext.Provider value={{isAuthenticated, signIn, signOut, recoveryToken}}>

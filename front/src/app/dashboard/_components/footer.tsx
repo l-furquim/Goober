@@ -1,3 +1,4 @@
+import { ThemeButton } from "@/components/theme/theme-button";
 import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
@@ -27,6 +28,9 @@ const Footer = () => {
                     <Link href="#">
                         <TwitterLogoIcon/>
                     </Link>
+                </div>
+                <div>
+                    <ThemeButton/>
                 </div>
             </div>
         </div>

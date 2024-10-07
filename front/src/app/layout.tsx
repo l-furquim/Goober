@@ -5,6 +5,7 @@ import { NavBar } from "./dashboard/_components/nav-bar";
 import { AuthContextProvider } from "@/context/auth-context";
 import Footer from "./dashboard/_components/footer";
 import { ShoppingCartIcon } from "lucide-react";
+import { ThemeProvider } from "./theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,8 +28,13 @@ export default function RootLayout({
   <AuthContextProvider>
     <html lang="pt-br">
       <body className={`${inter.className} bg-zinc-950`} >
+        <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem>
           {children}
           <Footer/>
+        </ThemeProvider>
       </body>
     </html>
   </AuthContextProvider>

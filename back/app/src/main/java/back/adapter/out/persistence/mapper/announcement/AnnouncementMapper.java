@@ -15,14 +15,18 @@ public class AnnouncementMapper {
     public Optional<AnnouncementEntity> toEntity(Announcement announcement, List<ProductEntity> list){
         return Optional.of(new AnnouncementEntity(
                 announcement.getAnnouncementId(),
-              announcement.getAnnouncementPrice(),
                 announcement.getAnnouncementName(),
+                announcement.getAnnouncementPrice(),
                 announcement.getAnnouncementLikes(),
                 announcement.getAnnouncementQuestions(),
                 announcement.getAnnouncerId(),
                 announcement.getProductImages(),
-                list
-        ));
+                announcement.getAnnouncementNumber(),
+                announcement.getAnnouncementStreet(),
+                announcement.getAnnouncementState(),
+                list,
+                announcement.getAnnouncementDistrict()
+                ));
     }
 
 
@@ -37,7 +41,11 @@ public class AnnouncementMapper {
                 announcement.getAnnouncementEntityQuestions(),
                 announcement.getAnnouncerId(),
                 announcement.getProductImages(),
-                ProductMapper.productEntityToDomainList(announcement.getProducts())
+                ProductMapper.productEntityToDomainList(announcement.getProducts()),
+                announcement.getAnnouncementStreet(),
+                announcement.getAnnouncementNumber(),
+                announcement.getAnnouncementState(),
+                announcement.getAnnouncementDistrict()
         ));
     }
 

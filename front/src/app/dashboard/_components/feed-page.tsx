@@ -24,7 +24,7 @@ export type AnnouncementProps = {
     announcementPrice: Number,
     announcementLikes: Number,
     announcementQuestions: Number,
-    announcerId: String,
+    announcerName: String,
     productImages: String
     products: ProductProps[],
     productQuestions: Number

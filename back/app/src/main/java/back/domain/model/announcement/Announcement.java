@@ -38,6 +38,14 @@ public class Announcement implements Serializable {
 
     private List<Question> productQuestions;
 
+    private String announcementStreet;
+
+    private Integer announcementNumber;
+
+    private String announcementState;
+
+    private String announcementDistrict;
+
     public Announcement(){
 
     }
@@ -46,7 +54,12 @@ public class Announcement implements Serializable {
         return announcementId;
     }
 
-    public Announcement(UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerId, String productImages, List<Product> products) {
+    public Announcement(
+            UUID announcementId, BigDecimal announcementPrice,String announcementName, Integer announcementLikes,
+            Integer announcementQuestions, String announcerId, String productImages, List<Product> products,
+            String announcementStreet, Integer announcementNumber, String announcementState, String announcementDistrict
+    ) {
+
         this.announcementId = announcementId;
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
@@ -55,6 +68,10 @@ public class Announcement implements Serializable {
         this.products = products;
         this.announcerId = announcerId;
         this.productImages = productImages;
+        this.announcementStreet = announcementStreet;
+        this.announcementNumber = announcementNumber;
+        this.announcementState = announcementState;
+        this.announcementDistrict = announcementDistrict;
     }
 
     public void setAnnouncementId(UUID announcementId) {
@@ -139,5 +156,37 @@ public class Announcement implements Serializable {
 
     public void setAnnouncementName(String announcementName) {
         this.announcementName = announcementName;
+    }
+
+    public String getAnnouncementStreet() {
+        return announcementStreet;
+    }
+
+    public void setAnnouncementStreet(String announcementStreet) {
+        this.announcementStreet = announcementStreet;
+    }
+
+    public Integer getAnnouncementNumber() {
+        return announcementNumber;
+    }
+
+    public void setAnnouncementNumber(Integer announcementNumber) {
+        this.announcementNumber = announcementNumber;
+    }
+
+    public String getAnnouncementState() {
+        return announcementState;
+    }
+
+    public void setAnnouncementState(String announcementState) {
+        this.announcementState = announcementState;
+    }
+
+    public String getAnnouncementDistrict() {
+        return announcementDistrict;
+    }
+
+    public void setAnnouncementDistrict(String announcementDistrict) {
+        this.announcementDistrict = announcementDistrict;
     }
 }

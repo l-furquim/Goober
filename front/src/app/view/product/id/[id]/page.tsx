@@ -73,18 +73,18 @@ export type AnnouncementType = {
                  </p>
                  <p className="text-xl text-zinc-300"> {announcement.announcementName}</p>
                  <div className="container space-y-5 bg-zinc-900 h-40 w-80  items-center justify-normal flex flex-col rounded-xl">
-                     <p className="mt-5  text-zinc-300 ">{"Lucas Hernandes Furquim"}</p>
+                     <p className="mt-5  text-zinc-300 ">{announcement.announcerName}</p>
                      <hr className="border-1 w-32"/>
                      <p className=" text-zinc-300 flex flex-row  text-sm"><MapPin size={"20px"}/>{"Endereço"}</p>
                      <p className="text-xs mb-10 text-zinc-300 text-muted-foreground">{"Rua silvia 1603"}</p>
                  </div>    
              
-                 <div className="flex flex-row items-center justify-center gap-5 ">
-                     <Button className="bg-zinc-900  gap-3 mt-auto">
+                 <div className="flex flex-row items-center justify-center gap-5">
+                     <Button className="bg-zinc-300 text-black  gap-3 mt-auto hover:bg-zinc-400">
                          Comprar agora <HandshakeIcon size={"18px"} className="mt-1"/>
                      </Button>
          
-                     <Button className="gap-2">
+                     <Button className="gap-2 bg-zinc-300 text-black hover:bg-zinc-400">
                          Adicionar ao Carrinho <ShoppingCartIcon size={"18px"}/>
                      </Button>
          

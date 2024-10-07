@@ -34,6 +34,18 @@ public class AnnouncementEntity {
     @Column(name = "announcer_name")
     private String announcerName;
 
+    @Column(name = "announcementStreet")
+    private String announcementStreet;
+
+    @Column(name = "announcementNumber")
+    private Integer announcementNumber;
+
+    @Column(name = "announcementState")
+    private String announcementState;
+
+    @Column(name = "announcementDistrict")
+    private String announcementDistrict;
+
     @Column(name = "product_images")
     private String productImages;
 
@@ -55,15 +67,24 @@ public class AnnouncementEntity {
 
     }
 
-    public AnnouncementEntity(UUID announcementID ,BigDecimal announcementPrice,String announcementName, Integer announcementLikes, Integer announcementQuestions, String announcerName, String productImages, List<ProductEntity> products) {
-       this.announcementId = announcementID;
+    public AnnouncementEntity(
+            UUID announcementId, String announcementName, BigDecimal announcementPrice, Integer announcementLikes,
+            Integer announcementQuestions, String announcerName, String announcementStreet, Integer announcementNumber,
+            String announcementState, String productImages, List<ProductEntity> products, String announcementDistrict
+    ) {
+
+        this.announcementId = announcementId;
+        this.announcementName = announcementName;
         this.announcementPrice = announcementPrice;
         this.announcementLikes = announcementLikes;
-        this.announcementName = announcementName;
         this.announcementQuestions = announcementQuestions;
         this.announcerName = announcerName;
+        this.announcementStreet = announcementStreet;
+        this.announcementNumber = announcementNumber;
+        this.announcementState = announcementState;
         this.productImages = productImages;
         this.products = products;
+        this.announcementDistrict = announcementDistrict;
     }
 
     public UUID getAnnouncementEntityId() {
@@ -158,4 +179,43 @@ public class AnnouncementEntity {
         productQuestions.add(question);
     }
 
+    public String getAnnouncementName() {
+        return announcementName;
+    }
+
+    public void setAnnouncementName(String announcementName) {
+        this.announcementName = announcementName;
+    }
+
+    public String getAnnouncementStreet() {
+        return announcementStreet;
+    }
+
+    public void setAnnouncementStreet(String announcementStreet) {
+        this.announcementStreet = announcementStreet;
+    }
+
+    public Integer getAnnouncementNumber() {
+        return announcementNumber;
+    }
+
+    public void setAnnouncementNumber(Integer announcementNumber) {
+        this.announcementNumber = announcementNumber;
+    }
+
+    public String getAnnouncementState() {
+        return announcementState;
+    }
+
+    public void setAnnouncementState(String announcementState) {
+        this.announcementState = announcementState;
+    }
+
+    public String getAnnouncementDistrict() {
+        return announcementDistrict;
+    }
+
+    public void setAnnouncementDistrict(String announcementDistrict) {
+        this.announcementDistrict = announcementDistrict;
+    }
 }

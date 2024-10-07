@@ -19,6 +19,14 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import React from "react";
+import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+
 
 
 export type NewAnnouncementRequestType = {
@@ -26,7 +34,11 @@ export type NewAnnouncementRequestType = {
     annoncementDescription: String,
     announcementPrice: Number,
     announcementCategorie: String,
-    announcerToken: String
+    announcerToken: String,
+    announcementStreet: String,
+    announcementNumber: String,
+    announcementState: String,
+    announcementDistrict: String
 };
 
 
@@ -50,6 +62,12 @@ const NewAnnouncementPage = ({params,} : {
     const [announcementImages , setAnnoncementImages] = useState<File[]>([]);
     const [message, setMessage] = useState(<></>);
     const router = useRouter();
+    const [cep, setCep] = useState<string>("");
+    const [rua, setRua] = useState<string>("");
+    const [bairro, setBairro] = useState<string>("");
+    const [uf, setUf] = useState<string>("");
+    const [numero, setNumero] = useState<String>("");
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
 
     const {handleSubmit, register, setValue} = useForm<NewAnnouncementFormType>({
@@ -72,7 +90,6 @@ const NewAnnouncementPage = ({params,} : {
     const handleNewAnnouncementSubmit = async(data: NewAnnouncementFormType) =>{
 
         const {announcementName, announcementDescription , announcementPrice, announcementCategorie} = data;
-
         const form = new FormData();        
 
         const announcementJson: NewAnnouncementRequestType = {
@@ -81,6 +98,10 @@ const NewAnnouncementPage = ({params,} : {
             announcementPrice: parseFloat(announcementPrice),
             announcementCategorie: announcementCategorie.toString(),
             announcerToken: userCookies,
+            announcementStreet: rua,
+            announcementDistrict: bairro,
+            announcementNumber: numero,
+            announcementState: uf
         };
 
         form.append("announcementJson", new Blob([JSON.stringify(announcementJson)], { type: 'application/json' }))
@@ -113,6 +134,66 @@ const NewAnnouncementPage = ({params,} : {
 
     }   
 
+    const limpaFormularioCep = () => {
+        setRua("");
+        setBairro("");
+        setUf("");
+      };    
+
+    const handlePopoverClose = () => {
+        setIsPopoverOpen(false);
+        const endereco = {
+          cep,
+          rua,
+          bairro,
+          numero,
+          uf,
+    }
+    console.log(numero);
+    };
+      
+      const pesquisacep = async (valor: string) => {
+ 
+        const cepSomenteDigitos = valor.replace(/\D/g, "");
+        if (cepSomenteDigitos !== "") {
+          
+          const validacep = /^[0-9]{8}$/;
+    
+          if (validacep.test(cepSomenteDigitos)) {
+            setRua("...");
+            setBairro("...");
+            setUf("...");
+    
+            try {
+              const response = await fetch(`https://viacep.com.br/ws/${cepSomenteDigitos}/json/`);
+              const data = await response.json();
+    
+              if (!("erro" in data)) {
+                setRua(data.logradouro);
+                setBairro(data.bairro);
+                setUf(data.uf);
+              } else {
+
+                limpaFormularioCep();
+                alert("CEP não encontrado.");
+              }
+            } catch (error) {
+
+              limpaFormularioCep();
+              alert("Erro ao buscar o CEP.");
+            }
+          } else {
+
+            limpaFormularioCep();
+            alert("Formato de CEP inválido.");
+          }
+        } else {
+        
+          limpaFormularioCep();
+        }
+      };
+    
+
 
 
     return (
@@ -121,8 +202,8 @@ const NewAnnouncementPage = ({params,} : {
     <>
     <NavBar/>
         <div className=" flex items-center justify-center">
-            <div className="flex flex-col mt-10 text-zinc-300 p-16 rounded-xl justify-center 
-            w-[600px] h-[700px] bg-zinc-950 border border-muted-foreground border-zinc-300 ">
+            <div className="flex text-popover-foreground flex-col mt-10 text-zinc-300 p-16 rounded-xl justify-center 
+            w-[600px] h-[700px] bg-zinc-950 border border-muted-foreground shadow-md overflow-hidden border-zinc-300 ">
                     
                     {message}
 
@@ -180,6 +261,81 @@ const NewAnnouncementPage = ({params,} : {
                                         type="file" onChange={handleAnnouncementFile } accept="image/*" multiple/>
 
                             </div>
+                            <Popover open={isPopoverOpen} onOpenChange={(open)=> {
+                                setIsPopoverOpen(open);
+                                if(!open) handlePopoverClose();
+                            }}>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline">Endereço</Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-80">
+                                    <div className="grid gap-4 text-zinc-300">
+                                    <div className="space-y-2">
+                                        <h4 className="font-medium leading-none">Informações</h4>
+                                        <p className="text-sm text-muted-foreground">
+                                        insira as informações do endereço
+                                        </p>
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <div className="grid grid-cols-3 items-center gap-4">
+                                        <Label htmlFor="width">CEP</Label>
+                                        <Input
+                                        name="cep"
+                                        type="text"
+                                        value={cep}
+                                        size={10}
+                                        maxLength={9}
+                                        onBlur={(e) => pesquisacep(e.target.value)}
+                                        onChange={(e) => setCep(e.target.value)}
+                                        />
+                                        </div>
+                                        <div className="grid grid-cols-3 items-center gap-4">
+                                        <Label htmlFor="rua">Rua</Label>
+                                        <Input
+                                            name="rua"
+                                            value={rua}
+                                            className="col-span-2 h-8"
+                                            readOnly
+                                        />
+                                        </div>
+                                        <div className="grid grid-cols-3 items-center gap-4">
+                                        <Label htmlFor="numero">Numero</Label>
+                                        <Input
+                                            name="rua"
+                                            className="col-span-2 h-8"
+                                            type="text"
+                                            onChange={(e) => setNumero(e.target.value)}
+                                        />
+                                        </div>
+                                        <div className="grid grid-cols-3 items-center gap-4">
+                                        <Label htmlFor="bairro">Bairro</Label>
+                                        <Input
+                                            name="bairro"
+                                            className="col-span-2 h-8"
+                                            type="text"
+                                            readOnly
+                                            value={bairro}
+                                        />
+                                        </div>
+                                        <div className="grid grid-cols-3 items-center gap-4">
+                                            <Label htmlFor="estado">Estado</Label>
+                                            <Input 
+                                            name="uf"
+                                            className="col-span-2 h-8"
+                                            readOnly
+                                            type="text"
+                                            value={uf}
+                                            size={2}
+                                        />
+                                        </div>
+                                    </div>
+                                    </div>
+                                    </PopoverContent>
+                                </Popover>
+                            <div>
+
+                            </div>
+
                             
                             <div>
                                 <p className="justify-center items-center flex">
@@ -197,7 +353,6 @@ const NewAnnouncementPage = ({params,} : {
         </div>
     </>
     )
-
 }
 
 export default NewAnnouncementPage;

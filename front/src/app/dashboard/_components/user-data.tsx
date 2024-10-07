@@ -1,5 +1,6 @@
 'use client'
 
+import ExitAccount from "@/app/view/user/[user]/_components/exit-account";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { UserCircleIcon, UserIcon, WalletIcon } from "lucide-react"
@@ -46,10 +47,10 @@ export const UserData = () => {
             <DropdownMenuContent>
               <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                  <Link href={`/view/user/${value}`}>
-                    <DropdownMenuItem className="hover:cursor-pointer"><UserIcon size={15}/> Perfil</DropdownMenuItem>
+                  <Link href={`/view/user/${value}`} className="justify-center flex">
+                    <DropdownMenuItem className="bg-zinc-300 text-black hover:bg-zinc-400 hover:cursor-pointer w-[86%] h-full rounded-md justify-center font-semibold"><UserIcon size={15}/> Perfil</DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem><WalletIcon size={15}/> Pagamentos</DropdownMenuItem>
+                  <DropdownMenuItem><ExitAccount/></DropdownMenuItem>
              </DropdownMenuContent>
         </DropdownMenu>
 

@@ -111,7 +111,12 @@ const RegisterFormShema = z.object({
             
             <div className="container flex flex-col gap-10 bg-zinc-950 max-w-prose border-muted-foreground rounded-xl p-10 border-solid border-black border-[1px]">
 
+
                 <h2 className="font-bold text-xl text-zinc-300">Insira seus dados de registro:</h2>
+                
+                <span className="text-zinc-300 underline  text-muted-foreground text-sm">
+                    <a href="/login">Ja possui uma conta?</a>
+                </span>
 
                 {message}
 
