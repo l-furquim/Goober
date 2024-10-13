@@ -25,13 +25,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import type { AxiosError } from "axios";
 
 
 
 
 export type NewAnnouncementRequestType = {
     announcementName: String,
-    annoncementDescription: String,
+    announcementDescription: String,
     announcementPrice: Number,
     announcementCategorie: String,
     announcerToken: String,
@@ -94,7 +95,7 @@ const NewAnnouncementPage = ({params,} : {
 
         const announcementJson: NewAnnouncementRequestType = {
             announcementName: announcementName,
-            annoncementDescription: announcementDescription,
+            announcementDescription: announcementDescription,
             announcementPrice: parseFloat(announcementPrice),
             announcementCategorie: announcementCategorie.toString(),
             announcerToken: userCookies,
@@ -128,7 +129,10 @@ const NewAnnouncementPage = ({params,} : {
 
         
         }catch(e){
+            const axiosError = e as AxiosError;
 
+                <CustomAlert type={CustomAlertType.ERROR} title="Erro" 
+                msg={axiosError.message} ></CustomAlert>
 
         }
 
@@ -149,7 +153,6 @@ const NewAnnouncementPage = ({params,} : {
           numero,
           uf,
     }
-    console.log(numero);
     };
       
       const pesquisacep = async (valor: string) => {
@@ -213,14 +216,14 @@ const NewAnnouncementPage = ({params,} : {
                                 
                                 <div className="space-y-3">
                                     <p>Nome do produto: </p>
-                                        <Input {...register("announcementName")} className="bg-zinc-900  border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
+                                        <Input {...register("announcementName")} className="bg-zinc-900   text-zinc-300 focus-visible:ring-transparent"
                                         placeholder="Diga algo que chame atenção.."/>
                                 </div>
 
                                 <div className="space-y-3">
                                     <p>Descrição do produto: </p>
                                         <Input {...register("announcementDescription")} className="bg-zinc-900 
-                                        border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
+                                         text-zinc-300 focus-visible:ring-transparent"
                                             placeholder="Mouse bluetooth 5.0 ultra led HD"/>
                                 </div>
 
@@ -228,7 +231,7 @@ const NewAnnouncementPage = ({params,} : {
                                 <p>Preço do produto: </p>
                                 
                                     <p className="flex flex-row gap-2">  
-                                     <Input {...register("announcementPrice")} className="bg-zinc-900  border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
+                                     <Input {...register("announcementPrice")} className="bg-zinc-900   text-zinc-300 focus-visible:ring-transparent"
                                           placeholder="R$400.69" />
                                     </p>
                             </div>
@@ -237,10 +240,10 @@ const NewAnnouncementPage = ({params,} : {
                                 <p>Categoria do produto:</p>
 
                                 <Select onValueChange={(value) => setValue("announcementCategorie", value)}>
-                                    <SelectTrigger className="bg-zinc-900 border-zinc-300 text-zinc-300" id="categorie">
+                                    <SelectTrigger className="bg-zinc-900  text-zinc-300" id="categorie">
                                         <SelectValue placeholder="Escolher" />
                                     </SelectTrigger>
-                                    <SelectContent position="popper" className="bg-zinc-950  text-zinc-300 border-zinc-300 text-zinc-300 ">
+                                    <SelectContent position="popper" className="bg-zinc-950 text-zinc-300 ">
                                         <SelectItem value="GAMER">Gamer</SelectItem>
                                         <SelectItem value="CASA">Casa</SelectItem>
                                         <SelectItem value="ROUPAS E ACESSORIOS">Roupas e Acessórios</SelectItem>
@@ -257,7 +260,7 @@ const NewAnnouncementPage = ({params,} : {
                             
                             <div className="space-y-3">
                                 <p>Imagens do produto: </p>
-                                        <Input className="bg-zinc-900 border-zinc-300 text-zinc-300 focus-visible:ring-transparent"
+                                        <Input className="bg-zinc-900  text-zinc-300 focus-visible:ring-transparent"
                                         type="file" onChange={handleAnnouncementFile } accept="image/*" multiple/>
 
                             </div>

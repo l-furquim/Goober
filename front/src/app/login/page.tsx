@@ -52,7 +52,6 @@ import { z } from "zod"
                     const {token} = response.data;
                     
                     context.signIn(token);
-                    
                     setTimeout(()=> router.push("/dashboard/home"), 500);
                 }
 

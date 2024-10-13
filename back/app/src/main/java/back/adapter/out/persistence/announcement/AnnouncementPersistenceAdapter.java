@@ -1,6 +1,7 @@
 package back.adapter.out.persistence.announcement;
 
 import back.adapter.out.persistence.mapper.announcement.AnnouncementMapper;
+import back.adapter.out.persistence.mapper.product.ProductMapper;
 import back.adapter.out.persistence.repository.announcement.AnnouncementJpaRepository;
 import back.adapter.out.persistence.repository.product.ProductJpaRepository;
 import back.domain.model.announcement.Announcement;
@@ -14,6 +15,7 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.awt.SystemColor.text;
 
@@ -30,24 +32,25 @@ public class AnnouncementPersistenceAdapter implements AnnouncementRepository {
         this.announcementMapper = announcementMapper;
         this.announcementJpaRepository = announcementJpaRepository;
         this.productJpaRepository = productJpaRepository;
+
     }
 
     @Override
     public void save(Announcement announcement) {
-        var producEntityList = announcement.getProducts().stream().map(prod
-        -> productJpaRepository.findById(prod.getProductId()).get()).toList();
+
+        var prodEntities = announcement.getProducts().stream()
+                .map(prod -> productJpaRepository.findById(prod.getProductId()).get())
+                .collect(Collectors.toList());
 
 
-        var anEntity = announcementMapper.toEntity(announcement, producEntityList);
+        var anEntity = announcementMapper.toEntity(announcement, prodEntities);
 
-        log.info(announcement.getProducts().toString());
 
         announcementJpaRepository.save(anEntity.get());
     }
 
     @Override
     public void delete(Announcement announcement) {
-
 
         var anEntity = announcementJpaRepository.findById(announcement.getAnnouncementId());
 

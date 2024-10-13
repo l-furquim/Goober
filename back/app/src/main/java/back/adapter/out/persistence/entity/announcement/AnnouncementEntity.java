@@ -34,16 +34,16 @@ public class AnnouncementEntity {
     @Column(name = "announcer_name")
     private String announcerName;
 
-    @Column(name = "announcementStreet")
+    @Column(name = "announcement_street")
     private String announcementStreet;
 
-    @Column(name = "announcementNumber")
+    @Column(name = "announcement_number")
     private Integer announcementNumber;
 
-    @Column(name = "announcementState")
+    @Column(name = "announcement_state")
     private String announcementState;
 
-    @Column(name = "announcementDistrict")
+    @Column(name = "announcement_district")
     private String announcementDistrict;
 
     @Column(name = "product_images")

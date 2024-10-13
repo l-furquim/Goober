@@ -43,19 +43,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @CacheEvict(value = "announcements", allEntries = true)
     public Announcement createAnnouncement(CreateAnnouncementRequestDto createAnnouncementRequestDto,
-                                           User announcer, String imagesPath) {
+                                           User announcer, String imagesPath, Product product) {
         if(createAnnouncementRequestDto.announcementName().isBlank()){
             throw new AnnouncementException("Nao e possivel criar um anuncio sem nome !");
         }
 
-        var product = new Product(
-                UUID.randomUUID(),
-                createAnnouncementRequestDto.announcementName(),
-                BigDecimal.valueOf(createAnnouncementRequestDto.announcementPrice()),
-                ProductCategories.valueOf(createAnnouncementRequestDto.announcementCategorie()),
-                createAnnouncementRequestDto.announcementDescription(),
-                imagesPath
-        );
 
         var announcement = new Announcement(
                 UUID.randomUUID(),
@@ -75,7 +67,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcement.addProducts(product);
         try{
             announcementRepository.save(announcement);
-            productRepository.save(product);
             return announcement;
         }catch (IllegalArgumentException e){
             throw new UserException(e.getMessage());

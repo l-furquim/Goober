@@ -25,9 +25,12 @@ export type AnnouncementProps = {
     announcementLikes: Number,
     announcementQuestions: Number,
     announcerName: String,
-    productImages: String
+    productImages: String,
     products: ProductProps[],
-    productQuestions: Number
+    announcementStreet: String,
+    announcementNumber: String,
+    announcementState: String,
+    announcementDistrict: String
 };
 export type GetAllAnnouncementsResponse = {
     announces: AnnouncementProps[]
@@ -52,8 +55,6 @@ const FeedPage = () => {
                 });    
                 if(response.data){
                     const announcements = response.data as GetAllAnnouncementsResponse;
-                    console.log(response.headers);    
-
                     setAnnouncements(announcements.announces);
                     
                 }

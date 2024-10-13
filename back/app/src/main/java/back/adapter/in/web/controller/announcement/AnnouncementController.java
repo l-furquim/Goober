@@ -1,9 +1,12 @@
 package back.adapter.in.web.controller.announcement;
 
 import back.adapter.in.web.controller.announcement.dto.*;
+import back.adapter.in.web.controller.product.dto.CreateProductRequestDto;
+import back.domain.enums.ProductCategories;
 import back.domain.port.in.AnnouncementService;
 import back.domain.port.in.AuthService;
 import back.domain.port.in.ImageService;
+import back.domain.port.in.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,12 +27,14 @@ public class AnnouncementController {
     private final AnnouncementService announcementService;
     private final AuthService authService;
     private final ImageService imageService;
+    private final ProductService productService;
 
     @Autowired
-    public AnnouncementController(AnnouncementService announcementService, AuthService authService, ImageService imageService) {
+    public AnnouncementController(AnnouncementService announcementService, AuthService authService, ImageService imageService, ProductService productService) {
         this.announcementService = announcementService;
         this.authService = authService;
         this.imageService = imageService;
+        this.productService = productService;
     }
 
     @PostMapping("/create")
@@ -39,7 +46,15 @@ public class AnnouncementController {
         var announcerId = authService.getUserByToken(token.substring(7));
         var imagesPath = imageService.saveMultipleImages(announcementImages, "announcement/" + announcementJson.announcementName() + "/");
 
-        announcementService.createAnnouncement(announcementJson ,announcerId , imagesPath);
+        var prod = productService.createProduct(new CreateProductRequestDto(
+                announcementJson.announcementName(),
+                BigDecimal.valueOf(announcementJson.announcementPrice()),
+                ProductCategories.fromNome(announcementJson.announcementCategorie()),
+                announcementJson.announcementDescription(),
+                imagesPath
+        ));
+
+        announcementService.createAnnouncement(announcementJson ,announcerId , imagesPath, prod);
 
 
         return ResponseEntity.ok().body(new CreateAnnouncementResponseDto("Anuncio criado com sucesso"));

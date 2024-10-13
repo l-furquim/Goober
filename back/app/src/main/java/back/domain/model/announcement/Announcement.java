@@ -3,7 +3,6 @@ package back.domain.model.announcement;
 
 import back.domain.model.product.Product;
 import back.domain.model.question.Question;
-import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -29,8 +28,7 @@ public class Announcement implements Serializable {
     private Integer announcementQuestions;
 
 
-    private String announcerId;
-
+    private String announcerName;
 
     private String productImages;
 
@@ -66,7 +64,7 @@ public class Announcement implements Serializable {
         this.announcementName = announcementName;
         this.announcementQuestions = announcementQuestions;
         this.products = products;
-        this.announcerId = announcerId;
+        this.announcerName = announcerId;
         this.productImages = productImages;
         this.announcementStreet = announcementStreet;
         this.announcementNumber = announcementNumber;
@@ -95,11 +93,11 @@ public class Announcement implements Serializable {
     }
 
     public String getProductId() {
-        return announcerId;
+        return announcerName;
     }
 
     public void setProductId(UUID announcerId) {
-        this.announcerId = Announcement.this.announcerId;
+        this.announcerName = Announcement.this.announcerName;
     }
 
     public String getProductImages() {
@@ -114,11 +112,11 @@ public class Announcement implements Serializable {
     }
 
     public String getAnnouncerName() {
-        return announcerId;
+        return announcerName;
     }
 
     public void setAnnouncerName(String announcerId) {
-        this.announcerId = announcerId;
+        this.announcerName = announcerId;
     }
 
     public List<Product> getProducts() {
@@ -138,13 +136,6 @@ public class Announcement implements Serializable {
         this.announcementPrice = announcementPrice;
     }
 
-    public String getAnnouncerId() {
-        return announcerId;
-    }
-
-    public void setAnnouncerId(String announcerId) {
-        this.announcerId = announcerId;
-    }
 
     public void setProductQuestions(List<Question> productQuestions) {
         this.productQuestions = productQuestions;

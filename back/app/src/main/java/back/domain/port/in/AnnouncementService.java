@@ -5,6 +5,7 @@ import back.adapter.in.web.controller.announcement.dto.DeleteAnnouncementRequest
 import back.adapter.in.web.controller.announcement.dto.UpdateAnnouncementNameRequestDto;
 import back.adapter.in.web.controller.announcement.dto.UpdateAnnouncementPriceRequestDto;
 import back.domain.model.announcement.Announcement;
+import back.domain.model.product.Product;
 import back.domain.model.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,9 @@ import java.util.Optional;
 
 public interface AnnouncementService {
 
-    Announcement createAnnouncement(CreateAnnouncementRequestDto createAnnouncementRequestDto, User announcer, String imagesPath);
+    Announcement createAnnouncement(
+            CreateAnnouncementRequestDto createAnnouncementRequestDto, User announcer, String imagesPath, Product product);
+
     void deleteAnnouncement(DeleteAnnouncementRequestDto deleteAnnouncementRequestDto);
     void updateAnnouncementPrice(UpdateAnnouncementPriceRequestDto updateAnnouncementPriceRequestDto);
     void updateAnnouncementName(UpdateAnnouncementNameRequestDto updateAnnouncementNameRequestDto);

@@ -1,9 +1,8 @@
 'use client'
 
-import { AnnouncementProps, GetAllAnnouncementsResponse } from "@/app/dashboard/_components/feed-page";
+import { AnnouncementProps} from "@/app/dashboard/_components/feed-page";
 import { NavBar } from "@/app/dashboard/_components/nav-bar";
 import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
-import { AnnouncementsList } from "@/components/annoucement/annoucement-container";
 import { Button } from "@/components/ui/button";
 import { backEndApi } from "@/lib/api";
 import { AxiosError } from "axios";
@@ -38,6 +37,7 @@ export type AnnouncementType = {
 
                 if(response.data){
                     const ann = response.data as AnnouncementType;
+                    console.log(ann.announcement.products)
                     setAnnouncement(ann.announcement);
                 }
     
@@ -76,7 +76,11 @@ export type AnnouncementType = {
                      <p className="mt-5  text-zinc-300 ">{announcement.announcerName}</p>
                      <hr className="border-1 w-32"/>
                      <p className=" text-zinc-300 flex flex-row  text-sm"><MapPin size={"20px"}/>{"Endereço"}</p>
-                     <p className="text-xs mb-10 text-zinc-300 text-muted-foreground">{"Rua silvia 1603"}</p>
+                     <p className="text-xs mb-10 text-zinc-300 text-muted-foreground">
+                     {
+                     `${announcement.announcementStreet}, ${announcement.announcementNumber}-${announcement.announcementState}` 
+                     }
+                     </p>
                  </div>    
              
                  <div className="flex flex-row items-center justify-center gap-5">
@@ -113,10 +117,14 @@ export type AnnouncementType = {
                          <div className=" flex-col containerh-[300px] flex items-center justify-start 
                          absolute left-40 ml-8 mt-40 p-10 rounded-xl max-w-full w-2/6  ">
                                  <div className="flex flex-row gap-8">
-                                     <p className="container rounded-sm mt-5 bg-teal-950 text-zinc-300 ">{"GAMER"}</p>
+                                     <p className="container rounded-sm mt-5 bg-teal-950 text-zinc-300 ">{announcement.products.map(prod => (
+                                        prod.productCategorie
+                                     ))}</p>
                                  </div>
                                  
-                                 <p className="flex flex-row  left-20 mt-10 text-zinc-300 text-xl">????</p>
+                                 <p className="flex flex-row  left-20 mt-10 text-zinc-300 text-xl">{announcement.products.map(prod => (
+                                    prod.productDescription
+                                 ))}</p>
                                  <hr className="border-1 mt-10 w-[600px]"></hr>
                                  
                                  <div className="flex mt-30 p-10 flex-col justify-center items-center gap-20 ">

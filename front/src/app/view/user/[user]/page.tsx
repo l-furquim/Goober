@@ -9,9 +9,10 @@ import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import { PencilIcon } from "lucide-react";
 import { headers } from "next/headers";
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import ChangeEmail from "./_components/change-email";
+import { AuthContext } from "@/context/auth-context";
 
 
 export type GetUserDataResponseType = {
@@ -26,21 +27,13 @@ const UserPage = ({params}: {params: {user: String}}) => {
     const userCookie = getCookie("goober-auth");
     const [message, setMessage] = useState(<></>);
     const [userData, setUserData] = useState<GetUserDataResponseType>();
-
+    const context = useContext(AuthContext);
     
     useEffect(()=> {
         const getUserData = async() => {
             try{
-    
-                const response = await backEndApi.get("user/get", {
-                    headers: {
-                        'Authorization': `Bearer ${userCookie}`
-                    }
-                });
-    
-                if(response.data){
-                    setUserData(response.data as GetUserDataResponseType);
-                }
+                
+                setUserData(context.getUserData());
     
             }catch(e){
                 const axiosError = e as AxiosError;

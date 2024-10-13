@@ -1,5 +1,6 @@
 package back.adapter.out.persistence.entity.product;
 
+import back.adapter.out.persistence.entity.announcement.AnnouncementEntity;
 import back.domain.enums.ProductCategories;
 import back.domain.model.product.Product;
 import jakarta.persistence.*;
@@ -92,6 +93,7 @@ public class ProductEntity {
     public void setProductCategories(ProductCategories productCategories) {
         this.productCategories = productCategories;
     }
+
     @Override
     public String toString() {
         return "Product{" +

@@ -3,7 +3,6 @@ package back.adapter.out.persistence.mapper.announcement;
 import back.adapter.out.persistence.entity.announcement.AnnouncementEntity;
 import back.adapter.out.persistence.entity.product.ProductEntity;
 import back.adapter.out.persistence.mapper.product.ProductMapper;
-import back.adapter.out.persistence.mapper.question.QuestionMapper;
 import back.domain.model.announcement.Announcement;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +18,11 @@ public class AnnouncementMapper {
                 announcement.getAnnouncementPrice(),
                 announcement.getAnnouncementLikes(),
                 announcement.getAnnouncementQuestions(),
-                announcement.getAnnouncerId(),
-                announcement.getProductImages(),
-                announcement.getAnnouncementNumber(),
+                announcement.getAnnouncerName(),
                 announcement.getAnnouncementStreet(),
+                announcement.getAnnouncementNumber(),
                 announcement.getAnnouncementState(),
+                announcement.getProductImages(),
                 list,
                 announcement.getAnnouncementDistrict()
                 ));

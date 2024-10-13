@@ -48,9 +48,13 @@ export const UserData = () => {
               <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                   <Link href={`/view/user/${value}`} className="justify-center flex">
-                    <DropdownMenuItem className="bg-zinc-300 text-black hover:bg-zinc-400 hover:cursor-pointer w-[86%] h-full rounded-md justify-center font-semibold"><UserIcon size={15}/> Perfil</DropdownMenuItem>
+                    <DropdownMenuItem className="bg-zinc-300 text-black hover:bg-zinc-400 hover:cursor-pointer w-[86%] h-full rounded-md justify-center font-semibold">
+                      <UserIcon size={15}/> Perfil
+                      </DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem><ExitAccount/></DropdownMenuItem>
+                  <DropdownMenuItem className="font-semibold">
+                    <ExitAccount/>
+                  </DropdownMenuItem>
              </DropdownMenuContent>
         </DropdownMenu>
 
