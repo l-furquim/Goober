@@ -18,6 +18,7 @@ import back.domain.port.out.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -170,6 +171,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable("userSession")
     public User getUserPropsById(String id) {
         var user = userRepository.findById(id);
 

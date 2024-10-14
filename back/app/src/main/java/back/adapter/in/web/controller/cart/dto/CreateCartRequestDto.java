@@ -1,9 +1,9 @@
-package back.adapter.in.web.controller.cart.dto;
+    package back.adapter.in.web.controller.cart.dto;
 
-import back.domain.model.product.Product;
+    import back.domain.model.product.Product;
 
-import java.math.BigDecimal;
-import java.util.List;
+    import java.math.BigDecimal;
+    import java.util.List;
 
-public record CreateCartRequestDto(List<Product> productList) {
-}
+    public record CreateCartRequestDto(List<Product> productList) {
+    }

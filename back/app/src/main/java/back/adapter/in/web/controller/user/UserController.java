@@ -81,7 +81,7 @@ public class UserController {
 
         var user = authService.getUserByToken(token.substring(7));
 
-        return ResponseEntity.ok().body(new ShowUserPropsResponseDto(user.getUserEmail(), user.getUserName(), user.getUserImage()));
+        return ResponseEntity.ok().body(new ShowUserPropsResponseDto(user.getUserId().toString(),user.getUserEmail(), user.getUserName(), user.getUserImage()));
     }
     @GetMapping("/get/image/src/main/resources/static/images/user/{userName}")
     public ResponseEntity<byte[]> getUserImage(@PathVariable("userName") String userName){

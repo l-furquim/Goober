@@ -1,5 +1,6 @@
 'use client'
 
+import { UserData } from "@/app/dashboard/_components/user-data";
 import type { GetUserDataResponseType } from "@/app/view/user/[user]/page";
 import { backEndApi } from "@/lib/api";
 import type { AxiosError } from "axios";
@@ -21,7 +22,7 @@ type authContextType = {
     signIn: (token: String) => void,
     signOut: () => void,
     recoveryToken: () => String | undefined,
-    getUserData: () => GetUserDataResponseType | undefined;
+    getUserData: () => Promise<GetUserDataResponseType | undefined>;
 }
 
 
@@ -34,24 +35,10 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
     
     var isAuthenticated = !!recoveryToken();
 
-    async function signIn(token: String){
+     function signIn(token: String){
         setCookie("goober-auth", token, {
             maxAge: 60 * 60 * 3 
         });
-        try{
-            const data = await backEndApi.get("user/get", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-            if(data.data){
-                setUserData(data.data as GetUserDataResponseType)
-            }
-
-        }catch(e){
-            const axiosError = e as AxiosError;
-            console.log(axiosError);    
-        }
     }
 
     function signOut(){
@@ -67,9 +54,23 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
 
         return token;
     }
-    function getUserData(){
-        console.log(userData);
-        return userData;
+    async function getUserData(){
+        const cookie = recoveryToken();
+        try{
+            const data = await backEndApi.get("user/get", {
+                headers: {
+                    "Authorization": `Bearer ${cookie}`
+                },
+            });
+            if(data.data){
+                return data.data as GetUserDataResponseType;
+            }
+
+        }catch(e){
+            const axiosError = e as AxiosError;
+            console.log(axiosError);    
+        }
+        
     }
 
     return (

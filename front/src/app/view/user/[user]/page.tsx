@@ -3,12 +3,8 @@
 import { NavBar } from "@/app/dashboard/_components/nav-bar";
 import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { backEndApi } from "@/lib/api";
 import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
-import { PencilIcon } from "lucide-react";
-import { headers } from "next/headers";
 import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import ChangeEmail from "./_components/change-email";
@@ -16,6 +12,7 @@ import { AuthContext } from "@/context/auth-context";
 
 
 export type GetUserDataResponseType = {
+    userId: String, 
     userEmail: String,
     userName: String,
     userImagePath: String
