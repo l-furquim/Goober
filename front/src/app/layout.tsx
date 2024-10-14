@@ -4,10 +4,11 @@ import "./globals.css";
 import { NavBar } from "./dashboard/_components/nav-bar";
 import { AuthContextProvider } from "@/context/auth-context";
 import Footer from "./dashboard/_components/footer";
-import { ShoppingCartIcon } from "lucide-react";
 import { ThemeProvider } from "./theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
+
 
 export const metadata: Metadata = {
   title: "Goober",
@@ -33,6 +34,7 @@ export default function RootLayout({
         defaultTheme="system"
         enableSystem>
           {children}
+          <Toaster/>
           <Footer/>
         </ThemeProvider>
       </body>
