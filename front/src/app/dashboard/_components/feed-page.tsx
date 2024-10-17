@@ -1,9 +1,10 @@
 'use client'
 
 import { CustomAlert, CustomAlertType } from "@/components/alert/Alert";
-import { backEndApi } from "@/lib/api";
+import { backEndApi, getAnnouncements } from "@/lib/api";
 import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
+import type { GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -37,7 +38,7 @@ export type GetAllAnnouncementsResponse = {
 };
 
 
-const FeedPage = () => {
+const FeedPage = (context: GetServerSidePropsContext) => {
 
 
     const [announcement, setAnnouncements] = useState<AnnouncementProps[]>([]);
@@ -46,26 +47,14 @@ const FeedPage = () => {
 
     useEffect(() => {
         const GetAnnouncements  = async() => {
-            try{
-                
-                const response = await backEndApi.get("announcement/find/all", {
-                    headers: {
-                        'Authorization': `Bearer ${userCookie}`
-                    }
-                });    
-                if(response.data){
-                    const announcements = response.data as GetAllAnnouncementsResponse;
-                    setAnnouncements(announcements.announces);
-                    
-                }
-            }catch(e){
-                const axiosError = e as AxiosError;
-                setMessage(<CustomAlert type={CustomAlertType.ERROR} title={"Erro !"} msg={axiosError.message}/>)
-            }
+           const announcements = await getAnnouncements(context);
+           if(announcements){
+            setAnnouncements(announcements.announces);
+           }
         }
         GetAnnouncements()
 
-    }, [userCookie])
+    }, [])
 
     return (
         <div className="container flex flex-wrap justify-center ml-10 mt-10 bg-zinc-950  w-full gap-10 h-fit">

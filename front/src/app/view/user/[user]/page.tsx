@@ -8,7 +8,9 @@ import { getCookie } from "cookies-next";
 import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import ChangeEmail from "./_components/change-email";
-import { AuthContext } from "@/context/auth-context";
+import { AuthContext, UserDataType } from "@/context/auth-context";
+import { getUserData } from "@/lib/api";
+import type { GetServerSidePropsContext } from "next";
 
 
 export type GetUserDataResponseType = {
@@ -19,18 +21,20 @@ export type GetUserDataResponseType = {
 }
 
 
-const UserPage = ({params}: {params: {user: String}}) => {
-
-    const userCookie = getCookie("goober-auth");
+const UserPage = ({params}: {params: {user: String}}, context: GetServerSidePropsContext) => {
     const [message, setMessage] = useState(<></>);
     const [userData, setUserData] = useState<GetUserDataResponseType>();
-    const context = useContext(AuthContext);
-    
+
     useEffect(()=> {
-        const getUserData = async() => {
+
+        const getData = async() => {
             try{
-                
-                setUserData(context.getUserData());
+                const data = await getUserData(context);
+
+                if(data){
+                    setUserData(data);
+                    return;
+                }
     
             }catch(e){
                 const axiosError = e as AxiosError;
@@ -38,13 +42,14 @@ const UserPage = ({params}: {params: {user: String}}) => {
             }
         }
         
-        getUserData();
+        getData();
 
-    },[userCookie])
-    
+    },[])
+
+
     return (
        <>
-       <NavBar/>
+        <NavBar/>
         {userData ? (
         <div className="flex flex-col items-center mt-28 gap-10 pb-10 pt-10  justify-center h-full text-zinc-300 border rounded-xl border-muted-foreground ">
              {message}
@@ -56,12 +61,12 @@ const UserPage = ({params}: {params: {user: String}}) => {
                  <AvatarFallback>PFP</AvatarFallback>
              </Avatar>
  
-             <h1 className="text-zinc-300 font-bold">{userData?.userName}</h1>
+             <h1 className="text-zinc-300 font-bold">{userData.userName}</h1>
              
              <div>
                  <div className="flex flex-row gap-4 items-center">
                     
-                    {userData?.userEmail} 
+                    {userData.userEmail} 
                     
                     <ChangeEmail userEmail={userData.userEmail}/>
 
@@ -72,7 +77,6 @@ const UserPage = ({params}: {params: {user: String}}) => {
         ): (
             <p>Carregando suas informações...</p>
         )}   
-    
        </>
     )
 }

@@ -3,13 +3,14 @@ package back.domain.model.cart;
 import back.domain.model.product.Product;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 
-public class Cart {
-
+public class Cart implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private UUID cartId;
 

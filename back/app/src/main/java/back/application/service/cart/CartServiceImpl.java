@@ -8,6 +8,9 @@ import back.domain.model.cart.Cart;
 import back.domain.model.product.Product;
 import back.domain.port.in.CartService;
 import back.domain.port.out.CartRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +73,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CacheEvict(value="userCart", allEntries = true)
     public void addProductToCart(String cartId, List<Product> product) {
 
             var newPrice = calculateTotalPrice(product);
@@ -100,6 +104,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Cacheable("userCart")
     public Optional<List<Cart>> findCartByUserId(UUID userid) {
         var cart = cartRepository.findCartByUserId(userid);
 

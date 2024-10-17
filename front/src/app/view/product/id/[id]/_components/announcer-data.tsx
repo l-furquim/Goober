@@ -2,7 +2,7 @@ import type React from "react";
 import type { AnnouncementType } from "../page";
 import { HandshakeIcon, HeartIcon, MapPin, ShoppingCartIcon, Tags } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import AddCart from "./add-cart";
+import AddCart from "./add-cart-button";
 
 const AnnouncerData: React.FC<AnnouncementType> = ({announcement}) => {
 
@@ -31,7 +31,7 @@ const AnnouncerData: React.FC<AnnouncementType> = ({announcement}) => {
                      </Button>
          
                      <AddCart announcement={announcement}/>
-         
+                        
                      <HeartIcon/>
                  </div>
              </div>

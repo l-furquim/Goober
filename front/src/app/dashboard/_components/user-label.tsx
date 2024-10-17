@@ -1,14 +1,13 @@
 'use client'
 
-import ExitAccount from "@/app/view/user/[user]/_components/exit-account";
-import { Button } from "@/components/ui/button";
+import ExitAccount from "@/app/dashboard/_components/exit-account";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UserCircleIcon, UserIcon, WalletIcon } from "lucide-react"
-import Link from "next/link"
+import { UserCircleIcon} from "lucide-react"
 import { useRouter } from "next/navigation";
 import qs from "qs";
 import React from "react";
 import { useState } from "react";
+import SeeProfile from "./see-profile";
 
 export const UserData = () => {
 
@@ -47,11 +46,10 @@ export const UserData = () => {
             <DropdownMenuContent>
               <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                  <Link href={`/view/user/${value}`} className="justify-center flex">
-                    <DropdownMenuItem className="bg-zinc-300 text-black hover:bg-zinc-400 hover:cursor-pointer w-[86%] h-full rounded-md justify-center font-semibold">
-                      <UserIcon size={15}/> Perfil
-                      </DropdownMenuItem>
-                  </Link>
+                
+                    <DropdownMenuItem>
+                      <SeeProfile userName={value}/>
+                    </DropdownMenuItem>
                   <DropdownMenuItem className="font-semibold">
                     <ExitAccount/>
                   </DropdownMenuItem>

@@ -1,4 +1,4 @@
-'use client'
+    'use client'
 
 import { AnnouncementProps} from "@/app/dashboard/_components/feed-page";
 import { NavBar } from "@/app/dashboard/_components/nav-bar";
@@ -18,9 +18,9 @@ export type AnnouncementType = {
  const ProductContainer = ({params,} : {
     params: {id: String}; } )=> {
      
-        const [message, setMessage] = useState(<></>);
-        const [announcement, setAnnouncement] = useState<AnnouncementProps>();
-        const userCookie = getCookie("goober-auth");
+    const [message, setMessage] = useState(<></>);
+    const [announcement, setAnnouncement] = useState<AnnouncementProps>();
+    const userCookie = getCookie("goober-auth");
 
         useEffect(()=> {
 
@@ -46,7 +46,6 @@ export type AnnouncementType = {
         getAnnouncement()
     }, [userCookie])
 
-    const [imageSelected, setImageSelected] = useState();
 
     const [selected, setSelected] = useState(false);
 

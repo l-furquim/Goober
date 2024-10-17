@@ -1,11 +1,11 @@
 'use client'
 
-import { UserData } from "@/app/dashboard/_components/user-data";
+import { UserData } from "@/app/dashboard/_components/user-label";
 import type { GetUserDataResponseType } from "@/app/view/user/[user]/page";
 import { backEndApi } from "@/lib/api";
 import type { AxiosError } from "axios";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export type UserDataType = {
     userId: String,
@@ -40,7 +40,7 @@ type authContextType = {
 export const AuthContext = createContext({} as authContextType);
 
 export function AuthContextProvider({children}: {children: React.ReactNode}){
-    
+    const [userData, setUserData] = useState<GetUserDataAndCartResponseType>();
     
     var isAuthenticated = !!recoveryToken();
 

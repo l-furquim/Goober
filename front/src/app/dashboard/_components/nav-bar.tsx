@@ -1,7 +1,7 @@
 import { FilterBar } from "./filter-bar"
 import Link from "next/link"
 import { SearchBar } from "./search-bar"
-import { UserData } from "./user-data"
+import { UserData } from "./user-label"
 import { ShoppingCartIcon } from "lucide-react"
 import NewAnnouncement from "./new-announcement"
 import React from "react"
