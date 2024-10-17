@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
 import Link from "next/link";
-import CartsContainer from "./carts-container";
+import CartsButtonContainer from "./carts-button-container";
 
 
 const AddCart: React.FC<AnnouncementType> = ({announcement}) => {
@@ -69,7 +69,7 @@ const AddCart: React.FC<AnnouncementType> = ({announcement}) => {
           {userData ? (
             userData.cartData.map(cart => (
             <>
-             <CartsContainer announcement={announcement} carts={cart}/>
+             <CartsButtonContainer announcement={announcement} carts={cart}/>
             </>               
             ))
           ): (

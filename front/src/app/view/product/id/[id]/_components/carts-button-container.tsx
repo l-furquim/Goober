@@ -17,7 +17,7 @@ type CartsContainerProps = {
 }
 
 
-export default function CartsContainer( 
+export default function CartButtonContainer( 
         {announcement, carts}: CartsContainerProps
     ){
   
