@@ -14,15 +14,25 @@ export type UserDataType = {
     userPassword:String,
     userImage: String,
     status: String 
-}
+};
 
+export type GetUserCartReponseType = {
+    cartId: String,
+    itemsQuantity: Number,
+    totalPrice: Number
+};
+
+export type GetUserDataAndCartResponseType = {
+    userData: GetUserDataResponseType,
+    cartData: GetUserCartReponseType[]
+}
 
 type authContextType = {
     isAuthenticated :  boolean,
     signIn: (token: String) => void,
     signOut: () => void,
     recoveryToken: () => String | undefined,
-    getUserData: () => Promise<GetUserDataResponseType | undefined>;
+    getUserData: () => Promise<GetUserDataAndCartResponseType> | undefined;
 }
 
 
@@ -30,7 +40,6 @@ type authContextType = {
 export const AuthContext = createContext({} as authContextType);
 
 export function AuthContextProvider({children}: {children: React.ReactNode}){
-    const [userData, setUserData]  = useState<GetUserDataResponseType>();
     
     
     var isAuthenticated = !!recoveryToken();
@@ -57,13 +66,28 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
     async function getUserData(){
         const cookie = recoveryToken();
         try{
-            const data = await backEndApi.get("user/get", {
+            const response = await backEndApi.get("user/get", {
                 headers: {
                     "Authorization": `Bearer ${cookie}`
                 },
             });
-            if(data.data){
-                return data.data as GetUserDataResponseType;
+
+            
+
+            if(response.data){
+                const userData = response.data as GetUserDataResponseType;
+
+                const userCarts = await backEndApi.get(`cart/get/${userData.userId}`, {
+                    headers: {
+                        "Authorization": `Bearer ${cookie}`
+                    },
+                });
+                const finalResponse: GetUserDataAndCartResponseType = {
+                    userData: userData,
+                    cartData: userCarts.data as GetUserCartReponseType[]
+                };
+
+                return finalResponse;
             }
 
         }catch(e){

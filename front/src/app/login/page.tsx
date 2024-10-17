@@ -7,9 +7,11 @@ import { AuthContext } from "@/context/auth-context";
 import { backEndApi } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
+import { setCookie } from "cookies-next";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { NextRequest } from "next/server";
 import React from "react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -50,7 +52,7 @@ import { z } from "zod"
                 if(response.data){
 
                     const {token} = response.data;
-                    
+
                     context.signIn(token);
                     setTimeout(()=> router.push("/dashboard/home"), 500);
                 }

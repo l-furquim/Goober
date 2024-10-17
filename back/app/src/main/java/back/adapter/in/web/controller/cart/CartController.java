@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/cart")
 public class CartController {
@@ -43,6 +48,22 @@ public class CartController {
 
 
         return ResponseEntity.ok().body(new AddProductToCartResponseDto("produto adicionado com sucesso"));
+    }
+
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<List<FindCartByUserIdResponseDto>> findCartByUserId(@PathVariable("userId") String userId){
+
+        final var cart = cartService.findCartByUserId(UUID.fromString(userId));
+
+        if(cart.isEmpty()) {
+            return ResponseEntity.ok().body(Collections.emptyList());
+        }
+
+        return ResponseEntity.ok().body(
+                cart.get().stream().map(ct -> {
+                    return new FindCartByUserIdResponseDto(ct.getCartId(), ct.getItemsQuantity(), ct.getTotalPrice());
+                }).toList()
+        );
     }
 
 

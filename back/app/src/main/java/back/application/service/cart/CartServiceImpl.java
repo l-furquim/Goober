@@ -2,14 +2,12 @@ package back.application.service.cart;
 
 import back.adapter.in.web.controller.cart.dto.CreateCartRequestDto;
 import back.adapter.in.web.controller.cart.dto.DeleteCartRequestDto;
-import back.domain.exception.AnnouncementException;
 import back.domain.exception.CartException;
 import back.domain.exception.UserException;
 import back.domain.model.cart.Cart;
 import back.domain.model.product.Product;
 import back.domain.port.in.CartService;
 import back.domain.port.out.CartRepository;
-import back.domain.port.out.ProductRepository;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -99,5 +97,12 @@ public class CartServiceImpl implements CartService {
 
             cartRepository.delete(cart.get());
         }
+    }
+
+    @Override
+    public Optional<List<Cart>> findCartByUserId(UUID userid) {
+        var cart = cartRepository.findCartByUserId(userid);
+
+        return  cart;
     }
 }
